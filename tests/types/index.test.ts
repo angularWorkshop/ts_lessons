@@ -1,12 +1,21 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { getTranslation, messages } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+type ExpectedDictionary = {
+  defaultLocale: string;
+  fallbackMessage: string;
+  [key: string]: string;
+};
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+const messagesMustMatchExpectedShape: ExpectedDictionary = messages;
+const getTranslationParametersMustBeTyped: [ExpectedDictionary, string] =
+  null as unknown as Parameters<typeof getTranslation>;
+const getTranslationReturnMustBeString: string = null as unknown as ReturnType<typeof getTranslation>;
+
+void messagesMustMatchExpectedShape;
+void getTranslationParametersMustBeTyped;
+void getTranslationReturnMustBeString;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

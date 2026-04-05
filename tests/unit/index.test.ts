@@ -1,15 +1,11 @@
-import { createLessonUser, sum } from '../../src/index';
+import { getTranslation, messages } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('index signatures exercise', () => {
+  it('returns the requested translation when the key exists', () => {
+    expect(getTranslation(messages, 'welcome')).toBe('Welcome');
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('returns the fallback message when the key is missing', () => {
+    expect(getTranslation(messages, 'unknown')).toBe('Missing translation');
   });
 });
-
