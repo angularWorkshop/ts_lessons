@@ -1,12 +1,24 @@
 import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { parseJson, getLength, double, sum, clamp } from '../../src/index.js';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
+describe('lint-fixed type contracts', () => {
+  it('parseJson returns unknown after fixing any', () => {
+    expectTypeOf(parseJson('1')).not.toBeAny();
   });
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
+  it('getLength handles undefined safely', () => {
+    expectTypeOf(getLength).parameter(0).toEqualTypeOf<string | undefined>();
+  });
+
+  it('double returns number', () => {
+    expectTypeOf(double(1)).toBeNumber();
+  });
+
+  it('sum returns number', () => {
+    expectTypeOf(sum([1])).toBeNumber();
+  });
+
+  it('clamp returns number', () => {
+    expectTypeOf(clamp(1, 0, 10)).toBeNumber();
   });
 });
