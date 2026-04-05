@@ -24,8 +24,8 @@ void updateDtoShape;
 void createdUser;
 void updatedUser;
 
-// @ts-expect-error create dto must not contain id.
 const invalidCreateDto: CreateUserDto = {
+  // @ts-expect-error create dto must not contain id.
   id: 'user:max@example.com',
   name: 'Max',
   email: 'max@example.com',

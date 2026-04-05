@@ -5,12 +5,17 @@ export type User = {
   createdAt: Date;
 };
 
-export type CreateUserDto = User;
+export type CreateUserDto = Omit<User, 'id' | 'createdAt'>;
 
-export type UpdateUserDto = CreateUserDto;
+export type UpdateUserDto = Partial<CreateUserDto>;
 
 export function createUser(input: CreateUserDto): User {
-  return input;
+  return {
+    id: `user:${input.email}`,
+    name: input.name,
+    email: input.email,
+    createdAt: new Date(),
+  };
 }
 
 export function updateUser(user: User, patch: UpdateUserDto): User {
