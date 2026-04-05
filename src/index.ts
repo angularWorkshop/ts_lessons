@@ -6,17 +6,13 @@ export function buildSession(userId: string, role: 'student' | 'mentor') {
   };
 }
 
-export type Session = {
-  userId: string;
-  role: string;
-  createdAt: string;
-};
+export type Session = ReturnType<typeof buildSession>;
 
 export function runAction(action: string, retries: number): string {
   return `${action}:${retries}`;
 }
 
-export function logAction(args: [string, number]): string {
+export function logAction(args: Parameters<typeof runAction>): string {
   return runAction(args[0], args[1]);
 }
 
@@ -27,7 +23,4 @@ export async function fetchCourseMeta() {
   };
 }
 
-export type CourseMeta = Promise<{
-  title: string;
-  lessons: number;
-}>;
+export type CourseMeta = Awaited<ReturnType<typeof fetchCourseMeta>>;
