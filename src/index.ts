@@ -1,5 +1,6 @@
 export type Timestamped = {
   createdAt: Date;
+  updatedAt: Date;
 };
 
 export type Identifiable = {
@@ -8,9 +9,10 @@ export type Identifiable = {
 
 export type Auditable = {
   createdBy: string;
+  updatedBy: string;
 };
 
-export type Entity = Timestamped;
+export type Entity = Timestamped & Identifiable & Auditable;
 
 export function createEntity(input: {
   id: string;
@@ -19,7 +21,5 @@ export function createEntity(input: {
   updatedAt: Date;
   updatedBy: string;
 }): Entity {
-  return {
-    createdAt: input.createdAt,
-  };
+  return input;
 }
