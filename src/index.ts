@@ -1,26 +1,64 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type ClassMethod<This, Args extends unknown[], Return> = (
+  this: This,
+  ...args: Args
+) => Return;
 
-export type UserId = Brand<string, 'UserId'>;
+export function serializeArg(value: unknown): string {
+  const serialized = JSON.stringify(value);
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+  return serialized ?? String(value);
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
+export function Log() {
+  return function <This extends { logs: string[] }, Args extends unknown[], Return>(
+    _target: object,
+    propertyKey: string | symbol,
+    descriptor: TypedPropertyDescriptor<ClassMethod<This, Args, Return>>,
+  ): TypedPropertyDescriptor<ClassMethod<This, Args, Return>> {
+    const originalMethod = descriptor.value;
 
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
+    if (!originalMethod) {
+      return descriptor;
+    }
+
+    descriptor.value = function (this: This, ...args: Args): Return {
+      this.logs.push(`${String(propertyKey)}()`);
+      return originalMethod.apply(this, args);
+    };
+
+    return descriptor;
   };
 }
 
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
+export function Memoize() {
+  return function <This, Args extends unknown[], Return>(
+    _target: object,
+    _propertyKey: string | symbol,
+    descriptor: TypedPropertyDescriptor<ClassMethod<This, Args, Return>>,
+  ): TypedPropertyDescriptor<ClassMethod<This, Args, Return>> {
+    return descriptor;
+  };
 }
 
+export class PricingService {
+  public readonly logs: string[] = [];
+  private exchangeLookupCount = 0;
+
+  @Log()
+  public formatInvoice(customerId: string, amounts: readonly number[]): string {
+    const total = amounts.reduce((sum, amount) => sum + amount, 0);
+
+    return `${customerId}:${total.toFixed(2)}`;
+  }
+
+  @Memoize()
+  public convertTotal(amount: number, rate: number): number {
+    this.exchangeLookupCount += 1;
+
+    return Number((amount * rate).toFixed(2));
+  }
+
+  public getExchangeLookupCount(): number {
+    return this.exchangeLookupCount;
+  }
+}

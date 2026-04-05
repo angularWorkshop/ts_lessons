@@ -1,12 +1,18 @@
 import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { Log, Memoize, PricingService, serializeArg } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
+describe('decorator typing', () => {
+  it('keeps decorated method return types intact', () => {
+    const service = new PricingService();
+
+    expectTypeOf(service.formatInvoice('client-1', [10, 20])).toEqualTypeOf<string>();
+    expectTypeOf(service.convertTotal(10, 1.25)).toEqualTypeOf<number>();
+    expectTypeOf(service.logs).toEqualTypeOf<string[]>();
   });
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
+  it('types helper functions', () => {
+    expectTypeOf(serializeArg('client-1')).toEqualTypeOf<string>();
+    expectTypeOf(Log()).toBeFunction();
+    expectTypeOf(Memoize()).toBeFunction();
   });
 });
