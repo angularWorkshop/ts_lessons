@@ -4,7 +4,7 @@
   "private": true,
   "description": "Base repository for EduTec TypeScript course lessons",
   "stackblitz": {
-    "startCommand": "npm run check"
+    "startCommand": "npm run start:dev"
   },
   "type": "module",
   "files": [
@@ -23,9 +23,11 @@
   "scripts": {
     "build": "tsup src/index.ts --format esm,cjs --dts --clean",
     "typecheck": "tsc --noEmit",
+    "typecheck:watch": "tsc --noEmit --watch --preserveWatchOutput",
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run typecheck && npm run test",
+    "start:dev": "concurrently \"npm run typecheck:watch\" \"npm run test:watch\"",
     "pack:check": "npm pack --dry-run"
   },
   "engines": {
@@ -33,6 +35,7 @@
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
+    "concurrently": "^9.2.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
