@@ -1,26 +1,52 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+// TODO: add a nominal brand marker so different IDs are no longer interchangeable.
+export type Brand<T, Tag extends string> = T;
 
 export type UserId = Brand<string, 'UserId'>;
+export type OrderId = Brand<string, 'OrderId'>;
+export type ProductId = Brand<string, 'ProductId'>;
 
-export interface LessonUser {
+export interface UserRecord {
   id: UserId;
   name: string;
-  email?: string;
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export interface OrderRecord {
+  id: OrderId;
+  userId: UserId;
+  totalCents: number;
 }
 
-export function createLessonUser(name: string, email?: string): LessonUser {
+export function createUserId(raw: string): UserId {
+  return raw as UserId;
+}
+
+export function createOrderId(raw: string): OrderId {
+  return raw as OrderId;
+}
+
+export function createProductId(raw: string): ProductId {
+  return raw as ProductId;
+}
+
+export function createUserRecord(name: string): UserRecord {
   return {
     id: createUserId(`user:${name.toLowerCase()}`),
     name,
-    ...(email ? { email } : {}),
   };
 }
 
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
+export function assignOrderToUser(userId: UserId, orderId: OrderId): string {
+  return `${orderId} -> ${userId}`;
 }
 
+export function reserveProduct(orderId: OrderId, productId: ProductId): string {
+  return `${orderId}:${productId}`;
+}
+
+export function createOrderRecord(userId: UserId, totalCents: number): OrderRecord {
+  return {
+    id: createOrderId(`order:${totalCents}`),
+    userId,
+    totalCents,
+  };
+}
