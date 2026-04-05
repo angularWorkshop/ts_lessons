@@ -27,7 +27,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "check": "npm run typecheck && npm run test",
-    "start:dev": "concurrently \"npm run typecheck:watch\" \"npm run test:watch\"",
+    "start:dev": "node scripts/stackblitz-status.mjs",
     "pack:check": "npm pack --dry-run"
   },
   "engines": {
@@ -35,7 +35,6 @@
   },
   "devDependencies": {
     "@types/node": "^24.3.0",
-    "concurrently": "^9.2.1",
     "tsup": "^8.5.0",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4"
