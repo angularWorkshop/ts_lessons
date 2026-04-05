@@ -1,15 +1,19 @@
-import { createLessonUser, sum } from '../../src/index';
+import { readFileSync } from 'node:fs';
+import { logMessage, throwError } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('never and void exercise', () => {
+  it('throws an error with the provided message', () => {
+    expect(() => throwError('Boom')).toThrowError('Boom');
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('returns undefined from the logger', () => {
+    expect(logMessage('Saved')).toBeUndefined();
+  });
+
+  it('documents the difference between void and undefined', () => {
+    const source: string = readFileSync(new URL('../../src/index.ts', import.meta.url), 'utf8');
+
+    expect(source).toMatch(/void/i);
+    expect(source).toMatch(/undefined/i);
   });
 });
-

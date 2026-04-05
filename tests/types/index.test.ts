@@ -1,12 +1,17 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { logMessage, throwError } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const throwErrorParametersMustBeString: [string] = null as unknown as Parameters<typeof throwError>;
+const throwErrorReturnMustBeNever: never = null as unknown as ReturnType<typeof throwError>;
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+const logMessageParametersMustBeString: [string] = null as unknown as Parameters<typeof logMessage>;
+const logMessageReturnMustBeVoid: void = null as unknown as ReturnType<typeof logMessage>;
+
+void throwErrorParametersMustBeString;
+void throwErrorReturnMustBeNever;
+void logMessageParametersMustBeString;
+void logMessageReturnMustBeVoid;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

@@ -1,26 +1,9 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
-
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export function throwError(message: string): Error {
+  // TODO: this function should throw and use the never return type
+  return new Error(message);
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function logMessage(message: string): string {
+  // TODO: this function should log and use the void return type
+  return message;
 }
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
