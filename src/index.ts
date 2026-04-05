@@ -1,24 +1,38 @@
-export type ApiResponse = {
-  status: string;
-  data?: string[];
-  error?: string;
-};
+export type ApiResponse =
+  | { status: 'success'; data: readonly string[] }
+  | { status: 'error'; error: string }
+  | { status: 'loading' };
 
-export type AppConfig = {
+export interface AppConfig {
   apiBaseUrl: string;
   retryCount: number;
-};
+  features: {
+    darkMode: boolean;
+    analytics: boolean;
+  };
+}
 
 export const defaultConfig: AppConfig = {
   apiBaseUrl: '/api',
   retryCount: 3,
+  features: {
+    darkMode: true,
+    analytics: false,
+  },
 };
 
 export const selectionReason = {
-  apiResponse: 'unknown',
-  appConfig: 'unknown',
+  apiResponse: 'type',
+  appConfig: 'interface',
 } as const;
 
 export function getResponseMessage(response: ApiResponse): string {
-  return response.status;
+  switch (response.status) {
+    case 'success':
+      return `Loaded ${response.data.length} items`;
+    case 'error':
+      return `Error: ${response.error}`;
+    case 'loading':
+      return 'Loading...';
+  }
 }
