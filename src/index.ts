@@ -1,18 +1,18 @@
 export class Stack<T> {
-  private readonly items: unknown[] = [];
+  private readonly items: T[] = [];
 
-  push(item: unknown): number {
+  push(item: T): number {
     return this.items.push(item);
   }
 
-  pop(): unknown {
+  pop(): T | undefined {
     return this.items.pop();
   }
 
-  peek(): unknown {
+  peek(): T | undefined {
     return this.items[this.items.length - 1];
   }
 }
 
-export const numberStack = new Stack<unknown>();
-export const stringStack = new Stack<unknown>();
+export const numberStack = new Stack<number>();
+export const stringStack = new Stack<string>();
