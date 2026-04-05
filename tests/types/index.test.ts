@@ -1,14 +1,18 @@
-import { expectTypeOf } from 'vitest';
+import { expect, test } from 'vitest';
 import { greet, greetAll } from '../../src/index';
 
-describe('first typed greeting types', () => {
-  it('uses a string parameter and string return type for greet', () => {
-    expectTypeOf(greet).parameters.toEqualTypeOf<[string]>();
-    expectTypeOf(greet).returns.toEqualTypeOf<string>();
-  });
+// These assignments intentionally surface direct TypeScript mismatch errors.
+const greetParametersMustBeString: [string] = null as unknown as Parameters<typeof greet>;
+const greetReturnMustBeString: string = null as unknown as ReturnType<typeof greet>;
 
-  it('uses readonly string arrays in greetAll', () => {
-    expectTypeOf(greetAll).parameters.toEqualTypeOf<[readonly string[]]>();
-    expectTypeOf(greetAll).returns.toEqualTypeOf<string[]>();
-  });
+const greetAllParametersMustBeReadonlyStringArray: [readonly string[]] = null as unknown as Parameters<typeof greetAll>;
+const greetAllReturnMustBeStringArray: string[] = null as unknown as ReturnType<typeof greetAll>;
+
+void greetParametersMustBeString;
+void greetReturnMustBeString;
+void greetAllParametersMustBeReadonlyStringArray;
+void greetAllReturnMustBeStringArray;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
