@@ -10,10 +10,14 @@ export type ErrorResponse = {
 
 export type ApiResponse = SuccessResponse | ErrorResponse;
 
-export function isSuccess(response: ApiResponse): boolean {
+export function isSuccess(response: ApiResponse): response is SuccessResponse {
   return response.status === 'success';
 }
 
 export function getResponseSummary(response: ApiResponse): string {
-  return response.status;
+  if (isSuccess(response)) {
+    return `Loaded ${response.data.length} users`;
+  }
+
+  return `Error: ${response.error}`;
 }
