@@ -1,26 +1,69 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type ValidationRule =
+  | { type: 'required' }
+  | { type: 'minLength'; value: number };
 
-export type UserId = Brand<string, 'UserId'>;
+const validationMetadata = new WeakMap<object, Map<string, ValidationRule[]>>();
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+function addRule(target: object, propertyKey: string, rule: ValidationRule): void {
+  const existingMetadata = validationMetadata.get(target) ?? new Map<string, ValidationRule[]>();
+  const existingRules = existingMetadata.get(propertyKey) ?? [];
+
+  existingMetadata.set(propertyKey, [...existingRules, rule]);
+  validationMetadata.set(target, existingMetadata);
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function Required(target: object, propertyKey: string): void {
+  addRule(target, propertyKey, { type: 'required' });
 }
 
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
+export function MinLength(_length: number) {
+  return function (_target: object, _propertyKey: string): void {};
 }
 
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
+export function getValidationMetadata(target: object): Record<string, ValidationRule[]> {
+  const metadata = validationMetadata.get(target);
+
+  if (!metadata) {
+    return {};
+  }
+
+  return Object.fromEntries(metadata.entries());
 }
 
+export function validate<T extends object>(instance: T): string[] {
+  const metadata = validationMetadata.get(Object.getPrototypeOf(instance));
+
+  if (!metadata) {
+    return [];
+  }
+
+  const errors: string[] = [];
+
+  for (const [propertyKey, rules] of metadata.entries()) {
+    const value = Reflect.get(instance, propertyKey);
+
+    for (const rule of rules) {
+      if (rule.type === 'required' && (!value || value === '')) {
+        errors.push(`${propertyKey} is required`);
+      }
+    }
+  }
+
+  return errors;
+}
+
+export class RegistrationForm {
+  @Required
+  public email = '';
+
+  @MinLength(8)
+  @Required
+  public password = '';
+
+  @MinLength(2)
+  public displayName = '';
+
+  constructor(init: Partial<RegistrationForm> = {}) {
+    Object.assign(this, init);
+  }
+}

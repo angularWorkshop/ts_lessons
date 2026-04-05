@@ -1,12 +1,28 @@
 import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import {
+  MinLength,
+  RegistrationForm,
+  Required,
+  getValidationMetadata,
+  type ValidationRule,
+  validate,
+} from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
+describe('validation typing', () => {
+  it('keeps form properties strongly typed', () => {
+    const form = new RegistrationForm();
+
+    expectTypeOf(form.email).toEqualTypeOf<string>();
+    expectTypeOf(form.password).toEqualTypeOf<string>();
+    expectTypeOf(form.displayName).toEqualTypeOf<string>();
   });
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
+  it('types decorators and helpers', () => {
+    expectTypeOf(Required).toBeFunction();
+    expectTypeOf(MinLength(8)).toBeFunction();
+    expectTypeOf(validate(new RegistrationForm())).toEqualTypeOf<string[]>();
+    expectTypeOf(getValidationMetadata(RegistrationForm.prototype)).toEqualTypeOf<
+      Record<string, ValidationRule[]>
+    >();
   });
 });

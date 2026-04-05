@@ -1,53 +1,26 @@
-# ts_lessons
+# Exercise 24.2: `@Validate`
 
-Base repository for EduTec TypeScript course exercises.
+## Goal
 
-Each exercise should branch from `main` into:
+Practice property decorators and metadata-driven validation for class instances.
 
-- `lesson-topic-XX-exercise-YY-slug`
-- `answer-topic-XX-exercise-YY-slug`
+## Task
 
-The repository is intentionally framework-agnostic. It provides:
+1. Implement `@Required` and `@MinLength(n)` for class properties.
+2. Store validation rules as metadata keyed by the class prototype.
+3. Implement `validate(instance)` so it checks every registered rule.
+4. Make all tests pass without changing the tests.
 
-- strict TypeScript configuration
-- unit tests via Vitest
-- type tests via `expectTypeOf`
-- library-ready build via `tsup`
-- package validation via `npm pack`
+## Constraints
 
-## Production standard
+- keep validation metadata outside the instance itself
+- support multiple rules on the same property
+- return readable string errors
+- do not use `any`
 
-- branch format and task rules: [EXERCISE_STANDARD.md](EXERCISE_STANDARD.md)
-- reusable starter files: [`templates/exercise/`](templates/exercise)
-
-Recommended workflow for a new exercise:
-
-1. Branch from `main` into `lesson-topic-XX-exercise-YY-slug`.
-2. Copy the files from `templates/exercise/` into the repository root.
-3. Adapt `README.md`, `src/index.ts`, and tests for the specific task.
-4. Ensure lesson branch has failing tests for unfinished `TODO`s.
-5. Create `answer-topic-XX-exercise-YY-slug` from the lesson branch and finish the solution.
-
-## Scripts
-
-- `npm run build` — build ESM, CJS and declarations into `dist/`
-- `npm run typecheck` — run TypeScript without emitting files
-- `npm run test` — run Vitest once
-- `npm run test:watch` — run Vitest in watch mode
-- `npm run check` — run typecheck and tests
-- `npm run pack:check` — create a package tarball locally
-
-## Suggested exercise layout
-
-- `src/` — starter or answer implementation
-- `tests/unit/` — behavioral tests
-- `tests/types/` — type-level assertions
-- `README.md` — exercise brief and local run instructions
-
-## Local workflow
+## Run locally
 
 ```bash
 npm install
 npm run check
-npm run build
 ```
