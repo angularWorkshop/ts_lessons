@@ -3,7 +3,9 @@ export abstract class Shape {
 }
 
 export class Circle extends Shape {
-  constructor(public readonly radius: number) {}
+  constructor(public readonly radius: number) {
+    super();
+  }
 
   public override area(): number {
     return Math.PI * this.radius * this.radius;
@@ -11,7 +13,9 @@ export class Circle extends Shape {
 }
 
 export class Rectangle extends Shape {
-  constructor(public readonly width: number, public readonly height: number) {}
+  constructor(public readonly width: number, public readonly height: number) {
+    super();
+  }
 
   public override area(): number {
     return this.width * this.height;
