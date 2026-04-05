@@ -5,11 +5,11 @@ export type ServiceState = {
 };
 
 export type GetterTypes<T> = {
-  [K in keyof T]: () => T[K];
+  [K in keyof T as `get${Capitalize<string & K>}`]: () => T[K];
 };
 
 export const getters: GetterTypes<ServiceState> = {
-  user: () => 'Max',
-  course: () => 'TypeScript',
-  isOnline: () => true,
+  getUser: () => 'Max',
+  getCourse: () => 'TypeScript',
+  getIsOnline: () => true,
 };

@@ -14,7 +14,9 @@ void generatedGetterTypes;
 void getterObjectMustMatch;
 
 // @ts-expect-error original property names must not remain in the remapped type.
-getters.user();
+const invalidOriginalGetterShape: { user: () => string } = getters;
+
+void invalidOriginalGetterShape;
 
 test('type contracts compile', () => {
   expect(true).toBe(true);
