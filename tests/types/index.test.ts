@@ -18,11 +18,11 @@ const missingConfigKey: AppConfig = {
   timeout: 5000,
 };
 
-// @ts-expect-error extra keys must be rejected.
 const invalidExtraKey: AppConfig = {
   apiUrl: 'https://api.edutec.work',
   timeout: 5000,
   debug: false,
+  // @ts-expect-error extra keys must be rejected.
   mode: 'test',
 };
 

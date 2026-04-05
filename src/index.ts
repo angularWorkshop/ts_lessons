@@ -1,9 +1,15 @@
-export type ConfigKey = string;
+export type ConfigKey = 'apiUrl' | 'timeout' | 'debug';
 
 export type ConfigValue = string | number | boolean;
 
-export type AppConfig = Partial<Record<ConfigKey, ConfigValue>>;
+export type AppConfig = Record<ConfigKey, ConfigValue>;
 
 export function validateConfig(config: AppConfig): boolean {
-  return Object.values(config).every((value) => value !== null && value !== undefined);
+  return (
+    typeof config.apiUrl === 'string' &&
+    config.apiUrl.length > 0 &&
+    typeof config.timeout === 'number' &&
+    config.timeout >= 0 &&
+    typeof config.debug === 'boolean'
+  );
 }
