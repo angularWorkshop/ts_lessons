@@ -1,28 +1,21 @@
-# Exercise 19.1: Setting up ESLint for a TS Project
+# Exercise 19.1: Setting up ESLint for a TS Project — Solution
 
-## Goal
+## What was done
 
-Configure ESLint with typescript-eslint, enable type-aware rules, and fix all violations.
-
-## Task
-
-1. Complete `eslint.config.mjs` using `typescript-eslint`.
-2. Enable `recommendedTypeChecked` preset for type-aware linting.
-3. Add rules: `no-explicit-any`, `no-floating-promises`, `no-unused-vars`, `consistent-type-imports`.
-4. Fix all lint violations in `src/index.ts`.
-5. Update `npm run check` to include linting.
-6. Make all tests pass.
-
-## Constraints
-
-- do not remove any exported functions
-- replace `any` with `unknown`, not with a made-up type
-- handle the floating promise properly (await or void)
+1. Configured `eslint.config.mjs` with `typescript-eslint` and `recommendedTypeChecked`
+2. Enabled `projectService` for type-aware linting
+3. Fixed all violations:
+   - `parseJson` returns `unknown` instead of `any`
+   - Removed unused `DEFAULT_TIMEOUT`
+   - Replaced `value!.length` with `value?.length ?? 0`
+   - Removed unnecessary `as number` assertion
+   - Added `void` before floating promise
+   - Changed to `import type { Readable }`
+4. Updated `check` script to include `lint`
 
 ## Run locally
 
 ```bash
 npm install
-npm run lint
 npm run check
 ```

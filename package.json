@@ -27,7 +27,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "lint": "eslint src/",
-    "check": "npm run typecheck && npm run test",
+    "check": "npm run lint && npm run typecheck && npm run test",
     "start:dev": "node scripts/stackblitz-status.mjs",
     "pack:check": "npm pack --dry-run"
   },
