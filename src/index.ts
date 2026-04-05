@@ -1,9 +1,7 @@
-export function greet(name: unknown): string {
-  // TODO: change the parameter type to string and return `Hello, <name>!`
-  return 'TODO';
+export function greet(name: string): string {
+  return `Hello, ${name}!`;
 }
 
-export function greetAll(names: readonly unknown[]): string[] {
-  // TODO: change the parameter type to readonly string[] and reuse greet for every item
-  return [];
+export function greetAll(names: readonly string[]): string[] {
+  return names.map((name: string) => greet(name));
 }
