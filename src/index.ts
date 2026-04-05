@@ -1,25 +1,23 @@
-export class Shape {
-  public area(): number {
-    return 0;
-  }
+export abstract class Shape {
+  public abstract area(): number;
 }
 
-export class Circle {
+export class Circle extends Shape {
   constructor(public readonly radius: number) {}
 
-  public area(): number {
-    return this.radius;
+  public override area(): number {
+    return Math.PI * this.radius * this.radius;
   }
 }
 
-export class Rectangle {
+export class Rectangle extends Shape {
   constructor(public readonly width: number, public readonly height: number) {}
 
-  public area(): number {
-    return this.width + this.height;
+  public override area(): number {
+    return this.width * this.height;
   }
 }
 
-export function sumAreas(shapes: unknown[]): number {
-  return shapes.length;
+export function sumAreas(shapes: readonly Shape[]): number {
+  return shapes.reduce((total: number, shape: Shape) => total + shape.area(), 0);
 }
