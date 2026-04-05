@@ -1,26 +1,28 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export class BankAccount {
+  public static createdCount = 0;
 
-export type UserId = Brand<string, 'UserId'>;
+  public readonly id: string;
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+  public balance: number;
+
+  constructor(id: string, initialBalance: number = 0) {
+    this.id = id;
+    this.balance = initialBalance;
+  }
+
+  public deposit(amount: number): number {
+    this.balance += amount;
+
+    return this.balance;
+  }
+
+  public withdraw(amount: number): number {
+    this.balance -= amount;
+
+    return this.balance;
+  }
+
+  public getBalance(): number {
+    return this.balance;
+  }
 }
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

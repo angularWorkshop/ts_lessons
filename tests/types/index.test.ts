@@ -1,12 +1,19 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { BankAccount } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const createdCountMustBeNumber: number = BankAccount.createdCount;
+const account = new BankAccount('acc-5', 10);
+const getBalanceReturnMustBeNumber: number = account.getBalance();
+const bankAccountPublicKeysMustStayEncapsulated: 'deposit' | 'withdraw' | 'getBalance' | 'id' =
+  null as unknown as keyof BankAccount;
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+// @ts-expect-error balance must not be publicly accessible
+account.balance;
+
+void createdCountMustBeNumber;
+void getBalanceReturnMustBeNumber;
+void bankAccountPublicKeysMustStayEncapsulated;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
