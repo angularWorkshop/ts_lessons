@@ -1,26 +1,7 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export const routes = ['/', '/courses', '/profile'];
 
-export type UserId = Brand<string, 'UserId'>;
+export type RoutePath = string;
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export function navigateTo(route: RoutePath): string {
+  return `Navigating to ${route}`;
 }
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

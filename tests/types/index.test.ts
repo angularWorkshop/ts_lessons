@@ -1,12 +1,19 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { navigateTo, routes, type RoutePath } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const firstRoute: '/' = routes[0];
+const validRoute: RoutePath = '/courses';
+const navigationMessage: string = navigateTo('/profile');
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+void firstRoute;
+void validRoute;
+void navigationMessage;
+
+// @ts-expect-error invalid routes must be rejected.
+const invalidRoute: RoutePath = '/settings';
+
+void invalidRoute;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
