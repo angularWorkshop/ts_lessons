@@ -1,12 +1,24 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { adminUser, printUser } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+type ExpectedUser = {
+  id: number;
+  name: string;
+  email?: string;
+};
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+type ExpectedAdmin = ExpectedUser & {
+  readonly permissions: readonly string[];
+};
+
+const printUserParametersMustBeTyped: [ExpectedUser] = null as unknown as Parameters<typeof printUser>;
+const printUserReturnMustBeString: string = null as unknown as ReturnType<typeof printUser>;
+const adminUserMustMatchExpectedShape: ExpectedAdmin = adminUser;
+
+void printUserParametersMustBeTyped;
+void printUserReturnMustBeString;
+void adminUserMustMatchExpectedShape;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
