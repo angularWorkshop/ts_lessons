@@ -1,12 +1,20 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { getPrimaryContact, users } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+type ExpectedUser = {
+  id: number;
+  name: string;
+};
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+const usersMustBeReadonlyArray: readonly ExpectedUser[] = users;
+const getPrimaryContactParametersMustUseReadonlyUsers: [readonly ExpectedUser[]] =
+  null as unknown as Parameters<typeof getPrimaryContact>;
+const getPrimaryContactReturnMustBeTuple: [boolean, string] = null as unknown as ReturnType<typeof getPrimaryContact>;
+
+void usersMustBeReadonlyArray;
+void getPrimaryContactParametersMustUseReadonlyUsers;
+void getPrimaryContactReturnMustBeTuple;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

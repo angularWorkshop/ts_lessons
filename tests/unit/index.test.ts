@@ -1,15 +1,18 @@
-import { createLessonUser, sum } from '../../src/index';
+import { getPrimaryContact, users } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('arrays and tuples exercise', () => {
+  it('keeps a typed list of users', () => {
+    expect(users).toEqual([
+      { id: 1, name: 'Max' },
+      { id: 2, name: 'Anna' },
+    ]);
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('returns the first user name inside a tuple', () => {
+    expect(getPrimaryContact(users)).toEqual([true, 'Max']);
+  });
+
+  it('returns a fallback tuple for an empty list', () => {
+    expect(getPrimaryContact([])).toEqual([false, 'No users']);
   });
 });
-

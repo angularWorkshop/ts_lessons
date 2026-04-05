@@ -1,26 +1,9 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export const users = [
+  { id: 1, name: 'Max' },
+  { id: 2, name: 'Anna' },
+];
 
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export function getPrimaryContact(list: readonly unknown[]): [string, boolean] {
+  // TODO: type the list correctly and return [boolean, string]
+  return ['No users', false];
 }
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
