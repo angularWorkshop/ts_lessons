@@ -14,17 +14,14 @@ export interface RetryConfig {
   readonly backoffMs: number;
 }
 
-// TODO: unwrap nested promises until a non-promise value remains.
-export type AsyncValue<T> = T extends Promise<infer Inner> ? Inner : T;
+export type AsyncValue<T> = T extends Promise<infer Inner> ? AsyncValue<Inner> : T;
 
-// TODO: remove top-level readonly modifiers.
 export type Mutable<T> = {
-  readonly [K in keyof T]: T[K];
+  -readonly [K in keyof T]: T[K];
 };
 
-// TODO: exclude protected keys from the patch shape.
 export type UpdatePayload<T, ProtectedKeys extends keyof T = never> = {
-  [K in keyof T]?: T[K];
+  [K in keyof T as K extends ProtectedKeys ? never : K]?: T[K];
 };
 
 export async function loadUser(id: string): Promise<ApiUser> {
