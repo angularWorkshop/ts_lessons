@@ -1,15 +1,9 @@
-import { createLessonUser, sum } from '../../src/index';
+import { getters } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
-  });
-
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+describe('getters', () => {
+  it('returns values through generated getter methods', () => {
+    expect(getters.getUser()).toBe('Max');
+    expect(getters.getCourse()).toBe('TypeScript');
+    expect(getters.getIsOnline()).toBe(true);
   });
 });
-

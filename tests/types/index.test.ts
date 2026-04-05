@@ -1,12 +1,21 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { getters, type GetterTypes, type ServiceState } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+type ExpectedGetterTypes = {
+  getUser: () => string;
+  getCourse: () => string;
+  getIsOnline: () => boolean;
+};
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+const generatedGetterTypes: ExpectedGetterTypes = null as unknown as GetterTypes<ServiceState>;
+const getterObjectMustMatch: ExpectedGetterTypes = getters;
+
+void generatedGetterTypes;
+void getterObjectMustMatch;
+
+// @ts-expect-error original property names must not remain in the remapped type.
+getters.user();
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
