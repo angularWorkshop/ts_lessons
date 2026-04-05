@@ -1,6 +1,14 @@
-export type MyReturnType<T> = unknown;
+export type MyReturnType<T extends (...args: never[]) => unknown> = T extends (
+  ...args: never[]
+) => infer ReturnValue
+  ? ReturnValue
+  : never;
 
-export type MyParameters<T> = unknown[];
+export type MyParameters<T extends (...args: never[]) => unknown> = T extends (
+  ...args: infer Parameters
+) => unknown
+  ? Parameters
+  : never;
 
 export function formatUser(name: string, age: number): string {
   return `${name} (${age})`;
