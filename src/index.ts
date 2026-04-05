@@ -1,26 +1,39 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type DeepReadonly<T> = Readonly<T>;
 
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
+export interface FeatureConfig {
   name: string;
-  email?: string;
+  flags: {
+    beta: boolean;
+    internal: boolean;
+  };
+  owners: Array<{
+    id: string;
+    contacts: {
+      email: string;
+    };
+  }>;
+  onInit: () => string;
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function asDeepReadonly<T>(value: T): DeepReadonly<T> {
+  return value as DeepReadonly<T>;
 }
 
-export function createLessonUser(name: string, email?: string): LessonUser {
+export function buildFeatureConfig(): FeatureConfig {
   return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
+    name: 'Type-Level Lab',
+    flags: {
+      beta: true,
+      internal: false,
+    },
+    owners: [
+      {
+        id: 'owner-1',
+        contacts: {
+          email: 'owner-1@edutec.dev',
+        },
+      },
+    ],
+    onInit: () => 'ready',
   };
 }
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

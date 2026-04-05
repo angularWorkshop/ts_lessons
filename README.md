@@ -1,53 +1,26 @@
-# ts_lessons
+# Exercise 22.1: DeepReadonly
 
-Base repository for EduTec TypeScript course exercises.
+## Goal
 
-Each exercise should branch from `main` into:
+Practice recursive conditional and mapped types by implementing a deep readonly utility that works with nested objects, arrays, and functions.
 
-- `lesson-topic-XX-exercise-YY-slug`
-- `answer-topic-XX-exercise-YY-slug`
+## Task
 
-The repository is intentionally framework-agnostic. It provides:
+1. Implement `DeepReadonly<T>`.
+2. Make nested object properties readonly.
+3. Make arrays readonly while keeping their item types recursively readonly.
+4. Leave function types unchanged.
+5. Make all tests pass.
 
-- strict TypeScript configuration
-- unit tests via Vitest
-- type tests via `expectTypeOf`
-- library-ready build via `tsup`
-- package validation via `npm pack`
+## Constraints
 
-## Production standard
+- do not use `any`
+- functions must stay callable
+- treat arrays recursively, not just the top-level container
 
-- branch format and task rules: [EXERCISE_STANDARD.md](EXERCISE_STANDARD.md)
-- reusable starter files: [`templates/exercise/`](templates/exercise)
-
-Recommended workflow for a new exercise:
-
-1. Branch from `main` into `lesson-topic-XX-exercise-YY-slug`.
-2. Copy the files from `templates/exercise/` into the repository root.
-3. Adapt `README.md`, `src/index.ts`, and tests for the specific task.
-4. Ensure lesson branch has failing tests for unfinished `TODO`s.
-5. Create `answer-topic-XX-exercise-YY-slug` from the lesson branch and finish the solution.
-
-## Scripts
-
-- `npm run build` — build ESM, CJS and declarations into `dist/`
-- `npm run typecheck` — run TypeScript without emitting files
-- `npm run test` — run Vitest once
-- `npm run test:watch` — run Vitest in watch mode
-- `npm run check` — run typecheck and tests
-- `npm run pack:check` — create a package tarball locally
-
-## Suggested exercise layout
-
-- `src/` — starter or answer implementation
-- `tests/unit/` — behavioral tests
-- `tests/types/` — type-level assertions
-- `README.md` — exercise brief and local run instructions
-
-## Local workflow
+## Run locally
 
 ```bash
 npm install
 npm run check
-npm run build
 ```
