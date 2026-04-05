@@ -1,26 +1,12 @@
-# Exercise 24.2: `@Validate`
+# Exercise 24.2: `@Validate` solution
 
-## Goal
+## What is implemented
 
-Practice property decorators and metadata-driven validation for class instances.
+- `@Required` registers mandatory fields
+- `@MinLength(n)` registers string-length constraints
+- metadata is stored per prototype in a `WeakMap`
+- `validate(instance)` walks through every registered rule and returns readable errors
 
-## Task
+## Outcome
 
-1. Implement `@Required` and `@MinLength(n)` for class properties.
-2. Store validation rules as metadata keyed by the class prototype.
-3. Implement `validate(instance)` so it checks every registered rule.
-4. Make all tests pass without changing the tests.
-
-## Constraints
-
-- keep validation metadata outside the instance itself
-- support multiple rules on the same property
-- return readable string errors
-- do not use `any`
-
-## Run locally
-
-```bash
-npm install
-npm run check
-```
+`RegistrationForm` now has explicit validation rules colocated with the model definition, while the validation engine stays reusable and type-safe.

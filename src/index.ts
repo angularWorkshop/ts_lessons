@@ -16,8 +16,10 @@ export function Required(target: object, propertyKey: string): void {
   addRule(target, propertyKey, { type: 'required' });
 }
 
-export function MinLength(_length: number) {
-  return function (_target: object, _propertyKey: string): void {};
+export function MinLength(length: number) {
+  return function (target: object, propertyKey: string): void {
+    addRule(target, propertyKey, { type: 'minLength', value: length });
+  };
 }
 
 export function getValidationMetadata(target: object): Record<string, ValidationRule[]> {
@@ -45,6 +47,14 @@ export function validate<T extends object>(instance: T): string[] {
     for (const rule of rules) {
       if (rule.type === 'required' && (!value || value === '')) {
         errors.push(`${propertyKey} is required`);
+      }
+
+      if (
+        rule.type === 'minLength' &&
+        typeof value === 'string' &&
+        value.length < rule.value
+      ) {
+        errors.push(`${propertyKey} must be at least ${rule.value} characters`);
       }
     }
   }
