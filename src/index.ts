@@ -1,16 +1,21 @@
+export enum Status {
+  Active = 'active',
+  Inactive = 'inactive',
+  Pending = 'pending',
+}
+
 export type UserRecord = {
   id: number;
   name: string;
-  status: string;
+  status: Status;
 };
 
 export const users: readonly UserRecord[] = [
-  { id: 1, name: 'Max', status: 'active' },
-  { id: 2, name: 'Anna', status: 'inactive' },
-  { id: 3, name: 'Leo', status: 'pending' },
+  { id: 1, name: 'Max', status: Status.Active },
+  { id: 2, name: 'Anna', status: Status.Inactive },
+  { id: 3, name: 'Leo', status: Status.Pending },
 ];
 
-export function filterUsersByStatus(list: readonly UserRecord[], status: string): UserRecord[] {
-  // TODO: replace string literals with a string enum and type the status argument with it
+export function filterUsersByStatus(list: readonly UserRecord[], status: Status): UserRecord[] {
   return list.filter((user: UserRecord) => user.status === status);
 }
