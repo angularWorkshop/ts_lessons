@@ -1,12 +1,43 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { defaultConfig, getResponseMessage, selectionReason, type AppConfig } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+type ExpectedApiResponse =
+  | { status: 'success'; data: readonly string[] }
+  | { status: 'error'; error: string }
+  | { status: 'loading' };
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+type ExpectedConfig = {
+  apiBaseUrl: string;
+  retryCount: number;
+  features: {
+    darkMode: boolean;
+    analytics: boolean;
+  };
+};
+
+declare module '../../src/index' {
+  interface AppConfig {
+    environment: 'dev' | 'prod';
+  }
+}
+
+const getResponseMessageParametersMustUseUnion: [ExpectedApiResponse] =
+  null as unknown as Parameters<typeof getResponseMessage>;
+const defaultConfigMustMatchExpectedShape: ExpectedConfig = defaultConfig;
+const augmentedConfigMustCompile: AppConfig = {
+  ...defaultConfig,
+  environment: 'dev',
+};
+const selectionReasonMustBeExplicit: {
+  readonly apiResponse: 'type';
+  readonly appConfig: 'interface';
+} = selectionReason;
+
+void getResponseMessageParametersMustUseUnion;
+void defaultConfigMustMatchExpectedShape;
+void augmentedConfigMustCompile;
+void selectionReasonMustBeExplicit;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

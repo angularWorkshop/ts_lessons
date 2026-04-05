@@ -1,15 +1,22 @@
-import { createLessonUser, sum } from '../../src/index';
+import { defaultConfig, getResponseMessage } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('type vs interface exercise', () => {
+  it('returns a success message with the item count', () => {
+    expect(getResponseMessage({ status: 'success', data: ['TS', 'JS'] })).toBe('Loaded 2 items');
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
+  it('returns the API error message', () => {
+    expect(getResponseMessage({ status: 'error', error: 'Unauthorized' })).toBe('Error: Unauthorized');
+  });
+
+  it('keeps a structured default config', () => {
+    expect(defaultConfig).toEqual({
+      apiBaseUrl: '/api',
+      retryCount: 3,
+      features: {
+        darkMode: true,
+        analytics: false,
+      },
     });
   });
 });
-

@@ -1,26 +1,24 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type ApiResponse = {
+  status: string;
+  data?: string[];
+  error?: string;
+};
 
-export type UserId = Brand<string, 'UserId'>;
+export type AppConfig = {
+  apiBaseUrl: string;
+  retryCount: number;
+};
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export const defaultConfig: AppConfig = {
+  apiBaseUrl: '/api',
+  retryCount: 3,
+};
+
+export const selectionReason = {
+  apiResponse: 'unknown',
+  appConfig: 'unknown',
+} as const;
+
+export function getResponseMessage(response: ApiResponse): string {
+  return response.status;
 }
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
