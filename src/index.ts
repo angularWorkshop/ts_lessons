@@ -1,19 +1,19 @@
 export interface Repository<T, ID> {
   save(entity: T): void;
-  getById(id: ID): unknown;
+  getById(id: ID): T | undefined;
   getAll(): T[];
   update(entity: T): void;
-  delete(id: ID): void;
+  delete(id: ID): boolean;
 }
 
-export class InMemoryRepository<T extends object, ID> implements Repository<T, ID> {
+export class InMemoryRepository<T extends { id: ID }, ID> implements Repository<T, ID> {
   private readonly items = new Map<ID, T>();
 
   save(entity: T): void {
-    this.items.set(crypto.randomUUID() as ID, entity);
+    this.items.set(entity.id, entity);
   }
 
-  getById(id: ID): unknown {
+  getById(id: ID): T | undefined {
     return this.items.get(id);
   }
 
@@ -22,11 +22,11 @@ export class InMemoryRepository<T extends object, ID> implements Repository<T, I
   }
 
   update(entity: T): void {
-    this.save(entity);
+    this.items.set(entity.id, entity);
   }
 
-  delete(id: ID): void {
-    this.items.delete(id);
+  delete(id: ID): boolean {
+    return this.items.delete(id);
   }
 }
 
