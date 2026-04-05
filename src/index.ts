@@ -18,11 +18,21 @@ export interface AcademyState {
   };
 }
 
-// TODO: replace with a recursive union of valid dot-notation paths.
-export type Paths<T> = string;
+type StringKeyOf<T> = Extract<keyof T, string>;
 
-// TODO: resolve the type at the provided dot-notation path.
-export type DeepPick<T, Path extends string> = T;
+export type Paths<T> = T extends object
+  ? {
+      [K in StringKeyOf<T>]: T[K] extends object ? K | `${K}.${Paths<T[K]>}` : K;
+    }[StringKeyOf<T>]
+  : never;
+
+export type DeepPick<T, Path extends string> = Path extends `${infer Key}.${infer Rest}`
+  ? Key extends keyof T
+    ? DeepPick<T[Key], Rest>
+    : never
+  : Path extends keyof T
+    ? T[Path]
+    : never;
 
 export function buildAcademyState(): AcademyState {
   return {
