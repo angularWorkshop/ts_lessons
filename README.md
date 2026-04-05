@@ -1,6 +1,6 @@
 # Topic 1.2 — Type Legacy JS Helpers
 
-This branch contains the starter for the second exercise in Topic 1.
+This branch contains the completed solution for the second exercise in Topic 1.
 
 ## Goal
 
@@ -8,9 +8,9 @@ Take a small JavaScript-style utility file and turn it into proper TypeScript wi
 
 ## Task
 
-Review `src/index.ts`. The functions already work at runtime, but they still look like old JavaScript.
+Review the final version in `src/index.ts`.
 
-You need to add types for:
+This exercise types three helpers:
 
 1. `sumPrices`
 2. `formatUser`
@@ -21,7 +21,6 @@ You need to add types for:
 - `sumPrices` must accept a readonly array of numbers and return a number
 - `formatUser` must accept a `User` object and return a string
 - `isAdult` must accept a number and return a boolean
-- do not change the current runtime behavior
 - do not use `any`
 
 ## Run locally
