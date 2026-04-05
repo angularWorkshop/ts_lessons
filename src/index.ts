@@ -1,26 +1,18 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+/// <reference path="./globals.d.ts" />
+export type { AppEnv } from './types.js';
 
-export type UserId = Brand<string, 'UserId'>;
+// Runtime: add unique() to Array prototype
+Array.prototype.unique = function <T>(this: T[]): T[] {
+  return [...new Set(this)];
+};
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+// Runtime: set global ENV
+globalThis.ENV = {
+  mode: 'development',
+  version: '1.0.0',
+  debug: true,
+};
+
+export function getEnv() {
+  return globalThis.ENV;
 }
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
