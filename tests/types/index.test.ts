@@ -1,12 +1,14 @@
 import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { greet, greetAll } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
+describe('first typed greeting types', () => {
+  it('uses a string parameter and string return type for greet', () => {
+    expectTypeOf(greet).parameters.toEqualTypeOf<[string]>();
+    expectTypeOf(greet).returns.toEqualTypeOf<string>();
   });
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
+  it('uses readonly string arrays in greetAll', () => {
+    expectTypeOf(greetAll).parameters.toEqualTypeOf<[readonly string[]]>();
+    expectTypeOf(greetAll).returns.toEqualTypeOf<string[]>();
   });
 });

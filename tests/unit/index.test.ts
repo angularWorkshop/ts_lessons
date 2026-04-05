@@ -1,15 +1,11 @@
-import { createLessonUser, sum } from '../../src/index';
+import { greet, greetAll } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('first typed greeting', () => {
+  it('greets one person', () => {
+    expect(greet('Max')).toBe('Hello, Max!');
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('greets many people', () => {
+    expect(greetAll(['Max', 'Anna'])).toEqual(['Hello, Max!', 'Hello, Anna!']);
   });
 });
-
