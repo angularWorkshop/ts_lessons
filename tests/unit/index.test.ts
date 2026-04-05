@@ -1,15 +1,23 @@
-import { createLessonUser, sum } from '../../src/index';
+import { validateConfig, type AppConfig } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('validateConfig', () => {
+  it('returns true for a complete valid config', () => {
+    const config: AppConfig = {
+      apiUrl: 'https://api.edutec.work',
+      timeout: 5000,
+      debug: false,
+    };
+
+    expect(validateConfig(config)).toBe(true);
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('returns false when values violate basic runtime rules', () => {
+    const config = {
+      apiUrl: '',
+      timeout: -1,
+      debug: true,
+    } as AppConfig;
+
+    expect(validateConfig(config)).toBe(false);
   });
 });
-

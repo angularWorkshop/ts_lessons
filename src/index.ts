@@ -1,26 +1,9 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type ConfigKey = string;
 
-export type UserId = Brand<string, 'UserId'>;
+export type ConfigValue = string | number | boolean;
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export type AppConfig = Partial<Record<ConfigKey, ConfigValue>>;
+
+export function validateConfig(config: AppConfig): boolean {
+  return Object.values(config).every((value) => value !== null && value !== undefined);
 }
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
