@@ -1,26 +1,44 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type MatchHandlers<T, E, R> = {
+  ok: (value: T) => R;
+  err: (error: E) => R;
+};
 
-export type UserId = Brand<string, 'UserId'>;
+export interface Result<T, E> {
+  readonly kind: 'ok' | 'err';
+  map<U>(fn: (value: T) => U): Result<U, E>;
+  mapErr<F>(fn: (error: E) => F): Result<T, F>;
+  match<R>(handlers: MatchHandlers<T, E, R>): R;
+}
 
-export interface LessonUser {
-  id: UserId;
+export interface JsonUser {
+  id: string;
   name: string;
-  email?: string;
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
+export function ok<T>(value: T): Result<T, never> {
   return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
+    kind: 'ok',
+    map: () => ok(value) as Result<unknown, never>,
+    mapErr: () => ok(value),
+    match: (handlers) => handlers.ok(value),
+  } as Result<T, never>;
 }
 
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
+export function err<E>(error: E): Result<never, E> {
+  return {
+    kind: 'err',
+    map: () => err(error),
+    mapErr: () => err(error) as Result<never, unknown>,
+    match: (handlers) => handlers.err(error),
+  } as Result<never, E>;
 }
 
+export function parseJsonResult(raw: string): Result<unknown, string> {
+  return ok(JSON.parse(raw));
+}
+
+export function getUserNameUppercase(raw: string): Result<string, string> {
+  return parseJsonResult(raw)
+    .map((value) => value as JsonUser)
+    .map((user) => user.name.toUpperCase());
+}
