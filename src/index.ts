@@ -3,11 +3,12 @@ export class BankAccount {
 
   public readonly id: string;
 
-  public balance: number;
+  private balance: number;
 
   constructor(id: string, initialBalance: number = 0) {
     this.id = id;
     this.balance = initialBalance;
+    BankAccount.createdCount += 1;
   }
 
   public deposit(amount: number): number {
@@ -17,6 +18,10 @@ export class BankAccount {
   }
 
   public withdraw(amount: number): number {
+    if (amount > this.balance) {
+      throw new Error('Insufficient funds');
+    }
+
     this.balance -= amount;
 
     return this.balance;
