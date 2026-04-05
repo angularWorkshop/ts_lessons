@@ -1,26 +1,19 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type SuccessResponse = {
+  status: 'success';
+  data: readonly { id: number; name: string }[];
+};
 
-export type UserId = Brand<string, 'UserId'>;
+export type ErrorResponse = {
+  status: 'error';
+  error: string;
+};
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export type ApiResponse = SuccessResponse | ErrorResponse;
+
+export function isSuccess(response: ApiResponse): boolean {
+  return response.status === 'success';
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function getResponseSummary(response: ApiResponse): string {
+  return response.status;
 }
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

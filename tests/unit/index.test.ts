@@ -1,15 +1,23 @@
-import { createLessonUser, sum } from '../../src/index';
+import { getResponseSummary, isSuccess } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('api response guards exercise', () => {
+  it('returns a loaded summary for successful responses', () => {
+    expect(
+      getResponseSummary({
+        status: 'success',
+        data: [
+          { id: 1, name: 'Max' },
+          { id: 2, name: 'Anna' },
+        ],
+      }),
+    ).toBe('Loaded 2 users');
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('returns an error summary for failed responses', () => {
+    expect(getResponseSummary({ status: 'error', error: 'Unauthorized' })).toBe('Error: Unauthorized');
+  });
+
+  it('identifies a success branch', () => {
+    expect(isSuccess({ status: 'success', data: [{ id: 1, name: 'Max' }] })).toBe(true);
   });
 });
-
