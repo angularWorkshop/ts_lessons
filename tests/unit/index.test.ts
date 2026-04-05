@@ -1,15 +1,15 @@
-import { createLessonUser, sum } from '../../src/index';
+import { describeEvent } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('discriminated union exercise', () => {
+  it('describes click events', () => {
+    expect(describeEvent({ type: 'click', x: 10, y: 20 })).toBe('Click at 10:20');
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('describes scroll events', () => {
+    expect(describeEvent({ type: 'scroll', offsetY: 120 })).toBe('Scroll to 120');
+  });
+
+  it('describes keypress events', () => {
+    expect(describeEvent({ type: 'keypress', key: 'Enter' })).toBe('Key pressed: Enter');
   });
 });
-

@@ -1,12 +1,14 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { assertNever, describeEvent, type AppEvent } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const describeEventMustReturnString: string = describeEvent({ type: 'click', x: 1, y: 2 });
+const assertNeverMustAcceptNever: (value: never) => never = assertNever;
+const eventUnionMustStayTyped: AppEvent = { type: 'keypress', key: 'Escape' };
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+void describeEventMustReturnString;
+void assertNeverMustAcceptNever;
+void eventUnionMustStayTyped;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

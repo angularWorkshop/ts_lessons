@@ -1,26 +1,19 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type AppEvent =
+  | { type: 'click'; x: number; y: number }
+  | { type: 'scroll'; offsetY: number }
+  | { type: 'keypress'; key: string };
 
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export function assertNever(value: string): never {
+  throw new Error(`Unexpected event: ${value}`);
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function describeEvent(event: AppEvent): string {
+  switch (event.type) {
+    case 'click':
+      return `Click at ${event.x}:${event.y}`;
+    case 'scroll':
+      return `Scroll to ${event.offsetY}`;
+    default:
+      return assertNever(event.type);
+  }
 }
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
