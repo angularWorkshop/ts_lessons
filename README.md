@@ -1,22 +1,12 @@
-# Exercise 22.1: DeepReadonly
+# Exercise 22.1: DeepReadonly — Solution
 
-## Goal
+## What was done
 
-Practice recursive conditional and mapped types by implementing a deep readonly utility that works with nested objects, arrays, and functions.
-
-## Task
-
-1. Implement `DeepReadonly<T>`.
-2. Make nested object properties readonly.
-3. Make arrays readonly while keeping their item types recursively readonly.
-4. Leave function types unchanged.
-5. Make all tests pass.
-
-## Constraints
-
-- do not use `any`
-- functions must stay callable
-- treat arrays recursively, not just the top-level container
+1. Implemented `DeepReadonly<T>` as a recursive conditional type.
+2. Left function types unchanged so they remain callable.
+3. Handled arrays recursively via `ReadonlyArray<...>`.
+4. Made nested object properties readonly at every depth.
+5. Verified runtime identity and compile-time readonly guarantees.
 
 ## Run locally
 

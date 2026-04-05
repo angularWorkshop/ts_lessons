@@ -1,4 +1,10 @@
-export type DeepReadonly<T> = Readonly<T>;
+export type DeepReadonly<T> = T extends (...args: never[]) => unknown
+  ? T
+  : T extends readonly (infer Item)[]
+    ? ReadonlyArray<DeepReadonly<Item>>
+    : T extends object
+      ? { readonly [K in keyof T]: DeepReadonly<T[K]> }
+      : T;
 
 export interface FeatureConfig {
   name: string;
