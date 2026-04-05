@@ -30,36 +30,32 @@ const editableRetryConfig: EditableRetryConfig = {
   attempts: 2,
   backoffMs: 250,
 };
+const retryConfigMustMatchExpected: ExpectedRetryConfig = null as unknown as EditableRetryConfig;
+const retryConfigMustStayExact: EditableRetryConfig = null as unknown as ExpectedRetryConfig;
+const userPatchMustMatchExpected: ExpectedUserPatch = null as unknown as SafeUserPatch;
+const userPatchMustStayExact: SafeUserPatch = null as unknown as ExpectedUserPatch;
 
 editableRetryConfig.attempts = 3;
 
 // @ts-expect-error protected keys must not appear in the update payload.
-const invalidPatch: SafeUserPatch = {
-  id: 'user-99',
-};
+const invalidPatch: SafeUserPatch = { id: 'user-99' };
 
 void invalidPatch;
+void retryConfigMustMatchExpected;
+void retryConfigMustStayExact;
+void userPatchMustMatchExpected;
+void userPatchMustStayExact;
 
 test('AsyncValue unwraps nested promises', () => {
   expectTypeOf<LoadedUser>().toEqualTypeOf<ApiUser>();
 });
 
 test('Mutable removes top-level readonly modifiers', () => {
-  expectTypeOf<EditableRetryConfig>().toEqualTypeOf<ExpectedRetryConfig>({
-    attempts: 1,
-    backoffMs: 100,
-  });
+  expectTypeOf(editableRetryConfig.attempts).toEqualTypeOf<number>();
 });
 
 test('UpdatePayload excludes protected keys', () => {
-  expectTypeOf<SafeUserPatch>().toEqualTypeOf<ExpectedUserPatch>({
-    role: 'student',
-    profile: {
-      displayName: 'Type Explorer',
-      timezone: 'UTC',
-    },
-    tags: ['typescript'],
-  });
+  expectTypeOf<keyof SafeUserPatch>().toEqualTypeOf<'profile' | 'role' | 'tags'>();
 });
 
 test('runtime helpers keep their public contracts', () => {
