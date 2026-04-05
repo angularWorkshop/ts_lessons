@@ -1,12 +1,28 @@
 import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import {
+  formatUserName,
+  getUserById,
+  getFirstElement,
+  createConfig,
+  type User,
+  type AppConfig,
+} from '../../src/index.js';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
+describe('strict type contracts', () => {
+  it('formatUserName accepts User, not any', () => {
+    expectTypeOf(formatUserName).parameter(0).not.toBeAny();
+    expectTypeOf(formatUserName).parameter(0).toEqualTypeOf<User>();
   });
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
+  it('getUserById may return undefined for missing users', () => {
+    expectTypeOf(getUserById).returns.toEqualTypeOf<string | undefined>();
+  });
+
+  it('getFirstElement may return undefined for empty arrays', () => {
+    expectTypeOf(getFirstElement).returns.toEqualTypeOf<string | undefined>();
+  });
+
+  it('createConfig returns AppConfig', () => {
+    expectTypeOf(createConfig).returns.toEqualTypeOf<AppConfig>();
   });
 });
