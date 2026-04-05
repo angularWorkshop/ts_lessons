@@ -1,26 +1,8 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export const studentName: unknown = 42;
+export const studentAge: unknown = '28';
+export const isStudentActive: unknown = 'true';
 
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export function describeUnknownValue(value: unknown): string {
+  // TODO: handle string, number and boolean values with type guards
+  return 'TODO';
 }
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

@@ -1,12 +1,20 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { describeUnknownValue, isStudentActive, studentAge, studentName } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const studentNameMustBeString: string = studentName;
+const studentAgeMustBeNumber: number = studentAge;
+const isStudentActiveMustBeBoolean: boolean = isStudentActive;
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+const describeUnknownValueParametersMustBeUnknown: [unknown] =
+  null as unknown as Parameters<typeof describeUnknownValue>;
+const describeUnknownValueReturnMustBeString: string = null as unknown as ReturnType<typeof describeUnknownValue>;
+
+void studentNameMustBeString;
+void studentAgeMustBeNumber;
+void isStudentActiveMustBeBoolean;
+void describeUnknownValueParametersMustBeUnknown;
+void describeUnknownValueReturnMustBeString;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
