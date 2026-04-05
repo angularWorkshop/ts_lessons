@@ -1,26 +1,13 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
-
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export interface CourseStats {
+  title: string;
+  lessonCount: number;
+  tags: readonly string[];
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function buildCourseLabel(stats: CourseStats): string {
+  return `${stats.title} (${stats.lessonCount} lessons)`;
 }
 
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
+export function getFirstTag(stats: CourseStats): string | undefined {
+  return stats.tags[0];
 }
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

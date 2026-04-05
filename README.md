@@ -1,50 +1,33 @@
-# ts_lessons
+# Topic 2.1 — Create a Project tsconfig
 
-Base repository for EduTec TypeScript course exercises.
+This branch contains the starter for the first exercise in Topic 2.
 
-Each exercise should branch from `main` into:
+## Goal
 
-- `lesson-topic-XX-exercise-YY-slug`
-- `answer-topic-XX-exercise-YY-slug`
+Set up a real `tsconfig.json` for a small Node.js TypeScript project and make the compiler settings explicit.
 
-The repository is intentionally framework-agnostic. It provides:
+## Task
 
-- strict TypeScript configuration
-- unit tests via Vitest
-- type tests via `expectTypeOf`
-- library-ready build via `tsup`
-- package validation via `npm pack`
+Fix the root `tsconfig.json`.
 
-## Production standard
+You need to make sure that:
 
-- branch format and task rules: [EXERCISE_STANDARD.md](EXERCISE_STANDARD.md)
-- reusable starter files: [`templates/exercise/`](templates/exercise)
+1. `strict` is enabled
+2. `noUncheckedIndexedAccess` is enabled
+3. `rootDir` is `./src`
+4. `outDir` is `./dist`
+5. the config includes the source files correctly
 
-Recommended workflow for a new exercise:
+`tsconfig.vitest.json` is already prepared for tests. Do not move the task there.
 
-1. Branch from `main` into `lesson-topic-XX-exercise-YY-slug`.
-2. Copy the files from `templates/exercise/` into the repository root.
-3. Adapt `README.md`, `src/index.ts`, and tests for the specific task.
-4. Ensure lesson branch has failing tests for unfinished `TODO`s.
-5. Create `answer-topic-XX-exercise-YY-slug` from the lesson branch and finish the solution.
+## Requirements
 
-## Scripts
+- keep the source code in `src/index.ts` unchanged
+- do not edit the tests
+- the project config must compile source files into `dist/`
+- `npm run check` must pass
 
-- `npm run build` — build ESM, CJS and declarations into `dist/`
-- `npm run typecheck` — run TypeScript without emitting files
-- `npm run test` — run Vitest once
-- `npm run test:watch` — run Vitest in watch mode
-- `npm run check` — run typecheck and tests
-- `npm run pack:check` — create a package tarball locally
-
-## Suggested exercise layout
-
-- `src/` — starter or answer implementation
-- `tests/unit/` — behavioral tests
-- `tests/types/` — type-level assertions
-- `README.md` — exercise brief and local run instructions
-
-## Local workflow
+## Run locally
 
 ```bash
 npm install

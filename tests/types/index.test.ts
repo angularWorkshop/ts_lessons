@@ -1,12 +1,19 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { buildCourseLabel, getFirstTag, type CourseStats } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const buildCourseLabelParametersMustMatchCourseStats: [CourseStats] =
+  null as unknown as Parameters<typeof buildCourseLabel>;
+const buildCourseLabelReturnMustBeString: string = null as unknown as ReturnType<typeof buildCourseLabel>;
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+const getFirstTagParametersMustMatchCourseStats: [CourseStats] =
+  null as unknown as Parameters<typeof getFirstTag>;
+const getFirstTagReturnMustBeOptionalString: string | undefined = null as unknown as ReturnType<typeof getFirstTag>;
+
+void buildCourseLabelParametersMustMatchCourseStats;
+void buildCourseLabelReturnMustBeString;
+void getFirstTagParametersMustMatchCourseStats;
+void getFirstTagReturnMustBeOptionalString;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

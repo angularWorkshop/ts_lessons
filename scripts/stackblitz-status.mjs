@@ -17,6 +17,7 @@ const WATCH_TARGETS = [
   'tests/types/index.test.ts',
   'README.md',
   'tsconfig.json',
+  'tsconfig.vitest.json',
   'vitest.config.ts',
   'package.json',
 ];
@@ -82,8 +83,8 @@ async function executeChecks(reason) {
   printHeading(`Checking exercise status (#${runNumber})`, 'cyan');
   console.log(colorize('dim', `Reason: ${reason}`));
 
-  const typecheck = await runCommand('TypeScript', 'node', ['./node_modules/typescript/bin/tsc', '--noEmit', '--pretty', 'true']);
-  const tests = await runCommand('Vitest', 'node', ['./node_modules/vitest/vitest.mjs', 'run', '--reporter=basic']);
+  const typecheck = await runCommand('TypeScript', 'npm', ['run', 'typecheck']);
+  const tests = await runCommand('Vitest', 'npm', ['run', 'test', '--', '--reporter=basic']);
 
   if (typecheck.code !== 0) {
     printHeading('TYPE ERRORS', 'red');
