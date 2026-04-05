@@ -1,26 +1,26 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type MyPartial<T> = {
+  [K in keyof T]: T[K];
+};
 
-export type UserId = Brand<string, 'UserId'>;
+export type MyRequired<T> = {
+  [K in keyof T]: T[K];
+};
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
-}
+export type MyReadonly<T> = {
+  [K in keyof T]: T[K];
+};
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
+export type Nullable<T> = {
+  [K in keyof T]: T[K];
+};
 
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
+export type DeepPartial<T> = T;
+
+export type Profile = {
+  id: string;
+  nickname?: string;
+  stats: {
+    score: number;
+    tags: string[];
   };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
+};

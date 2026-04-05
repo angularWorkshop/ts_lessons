@@ -1,12 +1,43 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import {
+  type DeepPartial,
+  type MyPartial,
+  type MyReadonly,
+  type MyRequired,
+  type Nullable,
+  type Profile,
+} from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const partialProfile: MyPartial<Profile> = {};
+const requiredProfile: MyRequired<Profile> = {
+  id: 'profile-1',
+  nickname: 'max',
+  stats: {
+    score: 10,
+    tags: ['ts'],
+  },
+};
+const nullableProfile: Nullable<Profile> = {
+  id: null,
+  nickname: null,
+  stats: null,
+};
+const deepPartialProfile: DeepPartial<Profile> = {
+  stats: {
+    score: 10,
+  },
+};
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+void partialProfile;
+void requiredProfile;
+void nullableProfile;
+void deepPartialProfile;
+
+// @ts-expect-error readonly properties must not be writable.
+((profile: MyReadonly<Profile>) => {
+  profile.id = 'new-id';
+})(null as unknown as MyReadonly<Profile>);
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
