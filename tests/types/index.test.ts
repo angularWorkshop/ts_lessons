@@ -17,7 +17,7 @@ type ExpectedConfig = {
 
 declare module '../../src/index' {
   interface AppConfig {
-    environment: 'dev' | 'prod';
+    environment?: 'dev' | 'prod';
   }
 }
 
