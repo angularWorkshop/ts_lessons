@@ -1,21 +1,12 @@
-# Exercise 17.1: Typing a JS Library
+# Exercise 17.1: Typing a JS Library — Solution
 
-## Goal
+## What was done
 
-Write a `.d.ts` declaration file for a plain JavaScript library that has no built-in types.
-
-## Task
-
-1. Examine the untyped JS module in `src/math-utils.js`.
-2. Create `src/math-utils.d.ts` that declares all exported functions and types.
-3. Use the declarations in `src/index.ts` to call the library with full type safety.
-4. Make all tests pass.
-
-## Constraints
-
-- do not modify `src/math-utils.js`
-- do not use `any` in your declarations
-- all function signatures must match the actual runtime behavior
+Replaced all `any` types in `src/math-utils.d.ts` with specific declarations matching the JS runtime:
+- `add`, `multiply`, `clamp` → `(number, number) → number`
+- `range` → `(number, number, number?) → number[]`
+- `createStats` → `(number[]) → Stats`
+- `Stats` interface with `min`, `max`, `mean`, `count` fields
 
 ## Run locally
 
