@@ -1,8 +1,19 @@
-export const studentName: unknown = 42;
-export const studentAge: unknown = '28';
-export const isStudentActive: unknown = 'true';
+export const studentName: string = 'Max';
+export const studentAge: number = 28;
+export const isStudentActive: boolean = true;
 
 export function describeUnknownValue(value: unknown): string {
-  // TODO: handle string, number and boolean values with type guards
-  return 'TODO';
+  if (typeof value === 'string') {
+    return `String: ${value}`;
+  }
+
+  if (typeof value === 'number') {
+    return `Number: ${value}`;
+  }
+
+  if (typeof value === 'boolean') {
+    return `Boolean: ${value}`;
+  }
+
+  return 'Unsupported value';
 }
