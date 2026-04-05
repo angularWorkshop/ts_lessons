@@ -1,5 +1,4 @@
-// TODO: add a phantom brand marker so each currency becomes distinct.
-export type Brand<T, Tag extends string> = T;
+export type Brand<T, Tag extends string> = T & { readonly __brand: Tag };
 
 export type EUR = Brand<number, 'EUR'>;
 export type USD = Brand<number, 'USD'>;
