@@ -1,6 +1,7 @@
 export interface TranslationDictionary {
   defaultLocale: string;
-  [key: string]: string | number;
+  fallbackMessage: string;
+  [key: string]: string;
 }
 
 export const messages: TranslationDictionary = {
@@ -11,5 +12,5 @@ export const messages: TranslationDictionary = {
 };
 
 export function getTranslation(dictionary: TranslationDictionary, key: string): string {
-  return dictionary.defaultLocale;
+  return dictionary[key] ?? dictionary.fallbackMessage;
 }
