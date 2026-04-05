@@ -1,12 +1,19 @@
 import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { formatUser, isAdult, sumPrices, type User } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
+describe('legacy js helpers types', () => {
+  it('keeps a readonly number array contract for sumPrices', () => {
+    expectTypeOf(sumPrices).parameters.toEqualTypeOf<[readonly number[]]>();
+    expectTypeOf(sumPrices).returns.toEqualTypeOf<number>();
   });
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
+  it('uses the User object shape in formatUser', () => {
+    expectTypeOf(formatUser).parameters.toEqualTypeOf<[User]>();
+    expectTypeOf(formatUser).returns.toEqualTypeOf<string>();
+  });
+
+  it('uses number to boolean for isAdult', () => {
+    expectTypeOf(isAdult).parameters.toEqualTypeOf<[number]>();
+    expectTypeOf(isAdult).returns.toEqualTypeOf<boolean>();
   });
 });

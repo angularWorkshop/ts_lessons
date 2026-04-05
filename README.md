@@ -1,50 +1,30 @@
-# ts_lessons
+# Topic 1.2 — Type Legacy JS Helpers
 
-Base repository for EduTec TypeScript course exercises.
+This branch contains the starter for the second exercise in Topic 1.
 
-Each exercise should branch from `main` into:
+## Goal
 
-- `lesson-topic-XX-exercise-YY-slug`
-- `answer-topic-XX-exercise-YY-slug`
+Take a small JavaScript-style utility file and turn it into proper TypeScript without changing its runtime behavior.
 
-The repository is intentionally framework-agnostic. It provides:
+## Task
 
-- strict TypeScript configuration
-- unit tests via Vitest
-- type tests via `expectTypeOf`
-- library-ready build via `tsup`
-- package validation via `npm pack`
+Review `src/index.ts`. The functions already work at runtime, but they still look like old JavaScript.
 
-## Production standard
+You need to add types for:
 
-- branch format and task rules: [EXERCISE_STANDARD.md](EXERCISE_STANDARD.md)
-- reusable starter files: [`templates/exercise/`](templates/exercise)
+1. `sumPrices`
+2. `formatUser`
+3. `isAdult`
 
-Recommended workflow for a new exercise:
+## Requirements
 
-1. Branch from `main` into `lesson-topic-XX-exercise-YY-slug`.
-2. Copy the files from `templates/exercise/` into the repository root.
-3. Adapt `README.md`, `src/index.ts`, and tests for the specific task.
-4. Ensure lesson branch has failing tests for unfinished `TODO`s.
-5. Create `answer-topic-XX-exercise-YY-slug` from the lesson branch and finish the solution.
+- `sumPrices` must accept a readonly array of numbers and return a number
+- `formatUser` must accept a `User` object and return a string
+- `isAdult` must accept a number and return a boolean
+- do not change the current runtime behavior
+- do not use `any`
 
-## Scripts
-
-- `npm run build` — build ESM, CJS and declarations into `dist/`
-- `npm run typecheck` — run TypeScript without emitting files
-- `npm run test` — run Vitest once
-- `npm run test:watch` — run Vitest in watch mode
-- `npm run check` — run typecheck and tests
-- `npm run pack:check` — create a package tarball locally
-
-## Suggested exercise layout
-
-- `src/` — starter or answer implementation
-- `tests/unit/` — behavioral tests
-- `tests/types/` — type-level assertions
-- `README.md` — exercise brief and local run instructions
-
-## Local workflow
+## Run locally
 
 ```bash
 npm install

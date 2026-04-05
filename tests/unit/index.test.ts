@@ -1,15 +1,16 @@
-import { createLessonUser, sum } from '../../src/index';
+import { formatUser, isAdult, sumPrices } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('legacy js helpers', () => {
+  it('sums numbers without changing runtime behavior', () => {
+    expect(sumPrices([10, 15.5, 4.5])).toBe(30);
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('formats the user label', () => {
+    expect(formatUser({ name: 'Max', age: 28 })).toBe('Max (28)');
+  });
+
+  it('detects adult age correctly', () => {
+    expect(isAdult(18)).toBe(true);
+    expect(isAdult(16)).toBe(false);
   });
 });
-
