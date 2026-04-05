@@ -1,26 +1,16 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
-
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
+export type UserRecord = {
+  id: number;
   name: string;
-  email?: string;
-}
+  status: string;
+};
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
+export const users: readonly UserRecord[] = [
+  { id: 1, name: 'Max', status: 'active' },
+  { id: 2, name: 'Anna', status: 'inactive' },
+  { id: 3, name: 'Leo', status: 'pending' },
+];
 
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
+export function filterUsersByStatus(list: readonly UserRecord[], status: string): UserRecord[] {
+  // TODO: replace string literals with a string enum and type the status argument with it
+  return list.filter((user: UserRecord) => user.status === status);
 }
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

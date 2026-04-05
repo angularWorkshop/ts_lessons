@@ -1,12 +1,22 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { filterUsersByStatus, Status, users } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+type ExpectedUserRecord = {
+  id: number;
+  name: string;
+  status: Status;
+};
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+const usersMustUseExpectedStatusShape: readonly ExpectedUserRecord[] = users;
+const filterUsersByStatusParametersMustBeTyped: [readonly ExpectedUserRecord[], Status] =
+  null as unknown as Parameters<typeof filterUsersByStatus>;
+const filterUsersByStatusReturnMustBeArray: ExpectedUserRecord[] =
+  null as unknown as ReturnType<typeof filterUsersByStatus>;
+
+void usersMustUseExpectedStatusShape;
+void filterUsersByStatusParametersMustBeTyped;
+void filterUsersByStatusReturnMustBeArray;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

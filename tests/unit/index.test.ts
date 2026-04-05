@@ -1,15 +1,11 @@
-import { createLessonUser, sum } from '../../src/index';
+import { filterUsersByStatus, Status, users } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('status enum exercise', () => {
+  it('filters active users', () => {
+    expect(filterUsersByStatus(users, Status.Active)).toEqual([{ id: 1, name: 'Max', status: Status.Active }]);
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('filters pending users', () => {
+    expect(filterUsersByStatus(users, Status.Pending)).toEqual([{ id: 3, name: 'Leo', status: Status.Pending }]);
   });
 });
-
