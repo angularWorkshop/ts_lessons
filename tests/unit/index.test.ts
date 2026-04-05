@@ -1,15 +1,13 @@
-import { createLessonUser, sum } from '../../src/index';
+import { resolveValue } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('resolveValue', () => {
+  it('unwraps nested promises at runtime', async () => {
+    const nestedPromise = Promise.resolve(Promise.resolve('typescript'));
+
+    await expect(resolveValue(nestedPromise)).resolves.toBe('typescript');
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('passes through non-promise values', async () => {
+    await expect(resolveValue(42)).resolves.toBe(42);
   });
 });
-

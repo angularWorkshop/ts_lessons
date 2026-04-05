@@ -1,12 +1,16 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { resolveValue, type UnwrapPromise } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const unwrapSinglePromise: string = null as unknown as UnwrapPromise<Promise<string>>;
+const unwrapNestedPromise: number = null as unknown as UnwrapPromise<Promise<Promise<number>>>;
+const keepPlainValue: boolean = null as unknown as UnwrapPromise<boolean>;
+const resolvedPromiseType: Promise<string> = resolveValue(Promise.resolve(Promise.resolve('ts')));
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+void unwrapSinglePromise;
+void unwrapNestedPromise;
+void keepPlainValue;
+void resolvedPromiseType;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
