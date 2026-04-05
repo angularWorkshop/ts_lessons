@@ -1,12 +1,26 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { createEntity, type Entity } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+type ExpectedEntity = {
+  id: string;
+  createdAt: Date;
+  updatedAt: Date;
+  createdBy: string;
+  updatedBy: string;
+};
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+const createdEntityMustMatchExpectedShape: ExpectedEntity = createEntity({
+  id: 'entity-2',
+  createdBy: 'max',
+  createdAt: new Date('2026-01-01T10:00:00.000Z'),
+  updatedAt: new Date('2026-01-02T10:00:00.000Z'),
+  updatedBy: 'anna',
+});
+const entityAliasMustMatchExpectedShape: ExpectedEntity = null as unknown as Entity;
+
+void createdEntityMustMatchExpectedShape;
+void entityAliasMustMatchExpectedShape;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

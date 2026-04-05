@@ -1,26 +1,25 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type Timestamped = {
+  createdAt: Date;
+};
 
-export type UserId = Brand<string, 'UserId'>;
+export type Identifiable = {
+  id: string;
+};
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
-}
+export type Auditable = {
+  createdBy: string;
+};
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
+export type Entity = Timestamped;
 
-export function createLessonUser(name: string, email?: string): LessonUser {
+export function createEntity(input: {
+  id: string;
+  createdBy: string;
+  createdAt: Date;
+  updatedAt: Date;
+  updatedBy: string;
+}): Entity {
   return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
+    createdAt: input.createdAt,
   };
 }
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
