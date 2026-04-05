@@ -6,11 +6,11 @@ export type AppConfig = {
   retryCount: number;
 };
 
-export const appConfig: AppConfig = {
+export const appConfig = {
   apiUrl: 'https://api.edutec.work',
   theme: 'dark',
   retryCount: 3,
-};
+} as const satisfies AppConfig;
 
 export function getApiBaseUrl(): string {
   return appConfig.apiUrl;
