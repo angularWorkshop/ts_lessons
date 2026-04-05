@@ -1,12 +1,16 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { add, sumAll } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const addNumbersMustReturnNumber: number = add(1, 2);
+const addStringsMustReturnString: string = add('a', 'b');
+const sumAllParametersMustBeNumbersOnly: number[] = null as unknown as Parameters<typeof sumAll>;
+const sumAllReturnMustBeNumber: number = null as unknown as ReturnType<typeof sumAll>;
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+void addNumbersMustReturnNumber;
+void addStringsMustReturnString;
+void sumAllParametersMustBeNumbersOnly;
+void sumAllReturnMustBeNumber;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

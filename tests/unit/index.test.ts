@@ -1,15 +1,15 @@
-import { createLessonUser, sum } from '../../src/index';
+import { add, sumAll } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('overloaded add exercise', () => {
+  it('adds numbers', () => {
+    expect(add(2, 3)).toBe(5);
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('concatenates strings', () => {
+    expect(add('Type', 'Script')).toBe('TypeScript');
+  });
+
+  it('sums multiple numbers with a rest parameter', () => {
+    expect(sumAll(2, 3, 5)).toBe(10);
   });
 });
-
