@@ -1,26 +1,27 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type TypeGuard<T> = (value: unknown) => value is T;
 
-export type UserId = Brand<string, 'UserId'>;
+export type Fetcher = (url: string) => Promise<unknown>;
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export type Todo = {
+  id: number;
+  title: string;
+  completed: boolean;
+};
+
+export async function fetchData<T>(
+  url: string,
+  guard: TypeGuard<T>,
+  fetcher: Fetcher,
+): Promise<unknown> {
+  const payload = await fetcher(url);
+
+  if (!guard(payload)) {
+    return null;
+  }
+
+  return payload;
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function isTodo(value: unknown): value is Todo {
+  return typeof value === 'object' && value !== null && 'id' in value;
 }
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
