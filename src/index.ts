@@ -1,26 +1,30 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+// TODO: add a phantom brand marker so each currency becomes distinct.
+export type Brand<T, Tag extends string> = T;
 
-export type UserId = Brand<string, 'UserId'>;
+export type EUR = Brand<number, 'EUR'>;
+export type USD = Brand<number, 'USD'>;
+export type RUB = Brand<number, 'RUB'>;
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export function eur(amount: number): EUR {
+  return amount as EUR;
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function usd(amount: number): USD {
+  return amount as USD;
 }
 
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
+export function rub(amount: number): RUB {
+  return amount as RUB;
 }
 
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
+export function convertEurToUsd(amount: EUR, rate: number): USD {
+  return usd(Number((amount * rate).toFixed(2)));
 }
 
+export function addUsd(left: USD, right: USD): USD {
+  return usd(left + right);
+}
+
+export function formatMoney(amount: EUR | USD | RUB, currency: 'EUR' | 'USD' | 'RUB'): string {
+  return `${currency} ${amount.toFixed(2)}`;
+}
