@@ -1,12 +1,14 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { filterValues, mapValues, type Predicate } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const mapValuesResultMustBeStringArray: string[] = mapValues([1, 2, 3], (value: number) => `${value}`);
+const filterValuesResultMustStayNumberArray: number[] = filterValues([1, 2, 3], (value: number) => value > 1);
+const predicateMustAcceptGenericValue: Predicate<number> = (value: number) => value > 0;
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+void mapValuesResultMustBeStringArray;
+void filterValuesResultMustStayNumberArray;
+void predicateMustAcceptGenericValue;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
