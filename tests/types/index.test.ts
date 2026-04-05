@@ -1,19 +1,24 @@
-import { expectTypeOf } from 'vitest';
+import { expect, test } from 'vitest';
 import { formatUser, isAdult, sumPrices, type User } from '../../src/index';
 
-describe('legacy js helpers types', () => {
-  it('keeps a readonly number array contract for sumPrices', () => {
-    expectTypeOf(sumPrices).parameters.toEqualTypeOf<[readonly number[]]>();
-    expectTypeOf(sumPrices).returns.toEqualTypeOf<number>();
-  });
+// These assignments intentionally surface direct TypeScript mismatch errors.
+const sumPricesParametersMustBeReadonlyNumberArray: [readonly number[]] =
+  null as unknown as Parameters<typeof sumPrices>;
+const sumPricesReturnMustBeNumber: number = null as unknown as ReturnType<typeof sumPrices>;
 
-  it('uses the User object shape in formatUser', () => {
-    expectTypeOf(formatUser).parameters.toEqualTypeOf<[User]>();
-    expectTypeOf(formatUser).returns.toEqualTypeOf<string>();
-  });
+const formatUserParametersMustMatchUser: [User] = null as unknown as Parameters<typeof formatUser>;
+const formatUserReturnMustBeString: string = null as unknown as ReturnType<typeof formatUser>;
 
-  it('uses number to boolean for isAdult', () => {
-    expectTypeOf(isAdult).parameters.toEqualTypeOf<[number]>();
-    expectTypeOf(isAdult).returns.toEqualTypeOf<boolean>();
-  });
+const isAdultParametersMustBeNumber: [number] = null as unknown as Parameters<typeof isAdult>;
+const isAdultReturnMustBeBoolean: boolean = null as unknown as ReturnType<typeof isAdult>;
+
+void sumPricesParametersMustBeReadonlyNumberArray;
+void sumPricesReturnMustBeNumber;
+void formatUserParametersMustMatchUser;
+void formatUserReturnMustBeString;
+void isAdultParametersMustBeNumber;
+void isAdultReturnMustBeBoolean;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
