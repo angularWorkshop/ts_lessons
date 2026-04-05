@@ -1,22 +1,12 @@
-# Exercise 21.1: Branded entity IDs
+# Exercise 21.1: Branded entity IDs — Solution
 
-## Goal
+## What was done
 
-Practice branded types for domain identifiers and prevent accidental mixing of IDs that are all represented by strings at runtime.
-
-## Task
-
-1. Implement a reusable `Brand<T, Tag>` helper.
-2. Define `UserId`, `OrderId`, and `ProductId` with distinct brands.
-3. Make the factory functions return the correct branded IDs.
-4. Ensure `assignOrderToUser` and `reserveProduct` only accept the matching ID types.
-5. Make all tests pass.
-
-## Constraints
-
-- keep runtime values as plain strings
-- do not use `any`
-- different branded IDs must not be assignable to each other
+1. Implemented `Brand<T, Tag>` with a readonly phantom marker.
+2. Defined distinct `UserId`, `OrderId`, and `ProductId` aliases on top of the shared helper.
+3. Kept all runtime values as plain strings via factory functions.
+4. Locked function signatures so entity IDs cannot be mixed accidentally.
+5. Verified runtime behavior and compile-time rejection of swapped IDs.
 
 ## Run locally
 

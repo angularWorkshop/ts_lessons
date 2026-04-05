@@ -1,5 +1,4 @@
-// TODO: add a nominal brand marker so different IDs are no longer interchangeable.
-export type Brand<T, Tag extends string> = T;
+export type Brand<T, Tag extends string> = T & { readonly __brand: Tag };
 
 export type UserId = Brand<string, 'UserId'>;
 export type OrderId = Brand<string, 'OrderId'>;
