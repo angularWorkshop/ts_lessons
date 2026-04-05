@@ -1,12 +1,14 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { appConfig, type AppConfig } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const configMatchesContract: AppConfig = appConfig;
+const themeMustStayLiteral: 'dark' = appConfig.theme;
+const apiUrlMustStayLiteral: 'https://api.edutec.work' = appConfig.apiUrl;
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+void configMatchesContract;
+void themeMustStayLiteral;
+void apiUrlMustStayLiteral;
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });

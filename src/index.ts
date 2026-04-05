@@ -1,26 +1,17 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type Theme = 'light' | 'dark';
 
-export type UserId = Brand<string, 'UserId'>;
+export type AppConfig = {
+  apiUrl: string;
+  theme: Theme;
+  retryCount: number;
+};
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export const appConfig: AppConfig = {
+  apiUrl: 'https://api.edutec.work',
+  theme: 'dark',
+  retryCount: 3,
+};
+
+export function getApiBaseUrl(): string {
+  return appConfig.apiUrl;
 }
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
