@@ -1,15 +1,19 @@
-export type EventName<T> = string;
+export type EventName<T> = `on${Capitalize<string & keyof T>}`;
+
+type EventKey<T, TEvent extends EventName<T>> = {
+  [K in keyof T]: TEvent extends `on${Capitalize<string & K>}` ? K : never;
+}[keyof T];
 
 export class EventEmitter<T extends Record<string, unknown>> {
-  private readonly listeners = new Map<string, Array<(value: unknown) => void>>();
+  private readonly listeners = new Map<string, Array<(value: T[keyof T]) => void>>();
 
-  on(event: string, handler: (value: unknown) => void): void {
+  on<TEvent extends EventName<T>>(event: TEvent, handler: (value: T[EventKey<T, TEvent>]) => void): void {
     const currentListeners = this.listeners.get(event) ?? [];
-    currentListeners.push(handler);
+    currentListeners.push(handler as (value: T[keyof T]) => void);
     this.listeners.set(event, currentListeners);
   }
 
-  emit(event: string, value: unknown): void {
+  emit<TEvent extends EventName<T>>(event: TEvent, value: T[EventKey<T, TEvent>]): void {
     const currentListeners = this.listeners.get(event) ?? [];
 
     for (const listener of currentListeners) {
