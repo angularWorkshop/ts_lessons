@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "description": "Base repository for EduTec TypeScript course lessons",
+  "stackblitz": {
+    "startCommand": "npm run check"
+  },
   "type": "module",
   "files": [
     "dist"
@@ -35,4 +38,3 @@
     "vitest": "^3.2.4"
   }
 }
-
