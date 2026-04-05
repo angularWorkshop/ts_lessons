@@ -1,26 +1,18 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export class Stack<T> {
+  private readonly items: unknown[] = [];
 
-export type UserId = Brand<string, 'UserId'>;
+  push(item: unknown): number {
+    return this.items.push(item);
+  }
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+  pop(): unknown {
+    return this.items.pop();
+  }
+
+  peek(): unknown {
+    return this.items[this.items.length - 1];
+  }
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
+export const numberStack = new Stack<unknown>();
+export const stringStack = new Stack<unknown>();

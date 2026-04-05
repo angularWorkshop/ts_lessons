@@ -1,15 +1,29 @@
-import { createLessonUser, sum } from '../../src/index';
+import { Stack, numberStack, stringStack } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('Stack', () => {
+  it('uses LIFO order', () => {
+    const stack = new Stack<number>();
+
+    expect(stack.peek()).toBeUndefined();
+
+    stack.push(10);
+    stack.push(20);
+
+    expect(stack.peek()).toBe(20);
+    expect(stack.pop()).toBe(20);
+    expect(stack.pop()).toBe(10);
+    expect(stack.pop()).toBeUndefined();
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('keeps separate stacks for separate value types', () => {
+    numberStack.push(1);
+    numberStack.push(2);
+    stringStack.push('ts');
+    stringStack.push('course');
+
+    expect(numberStack.pop()).toBe(2);
+    expect(numberStack.peek()).toBe(1);
+    expect(stringStack.pop()).toBe('course');
+    expect(stringStack.peek()).toBe('ts');
   });
 });
-

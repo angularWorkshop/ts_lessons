@@ -1,12 +1,21 @@
-import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { expect, test } from 'vitest';
+import { Stack, numberStack, stringStack } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
-  });
+const pushArgumentsMustBeTyped: Parameters<Stack<string>['push']> = ['hello'];
+const popMustReturnTypedValueOrUndefined: string | undefined = stringStack.pop();
+const peekMustReturnTypedValueOrUndefined: number | undefined = numberStack.peek();
+const inferredNumberStack: Stack<number> = numberStack;
+const inferredStringStack: Stack<string> = stringStack;
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
-  });
+void pushArgumentsMustBeTyped;
+void popMustReturnTypedValueOrUndefined;
+void peekMustReturnTypedValueOrUndefined;
+void inferredNumberStack;
+void inferredStringStack;
+
+// @ts-expect-error Stack<string> must reject numbers.
+stringStack.push(42);
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
