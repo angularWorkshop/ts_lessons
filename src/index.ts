@@ -1,26 +1,25 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type EventName<T> = string;
 
-export type UserId = Brand<string, 'UserId'>;
+export class EventEmitter<T extends Record<string, unknown>> {
+  private readonly listeners = new Map<string, Array<(value: unknown) => void>>();
 
-export interface LessonUser {
-  id: UserId;
+  on(event: string, handler: (value: unknown) => void): void {
+    const currentListeners = this.listeners.get(event) ?? [];
+    currentListeners.push(handler);
+    this.listeners.set(event, currentListeners);
+  }
+
+  emit(event: string, value: unknown): void {
+    const currentListeners = this.listeners.get(event) ?? [];
+
+    for (const listener of currentListeners) {
+      listener(value);
+    }
+  }
+}
+
+export type ProfileEvents = {
   name: string;
-  email?: string;
-}
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
+  age: number;
+  isOnline: boolean;
+};

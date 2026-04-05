@@ -1,15 +1,21 @@
-import { createLessonUser, sum } from '../../src/index';
+import { EventEmitter, type ProfileEvents } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
-  });
+describe('EventEmitter', () => {
+  it('notifies subscribed handlers', () => {
+    const emitter = new EventEmitter<ProfileEvents>();
+    const receivedValues: unknown[] = [];
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
+    emitter.on('onName', (value) => {
+      receivedValues.push(value);
     });
+
+    emitter.on('onAge', (value) => {
+      receivedValues.push(value);
+    });
+
+    emitter.emit('onName', 'Max');
+    emitter.emit('onAge', 29);
+
+    expect(receivedValues).toEqual(['Max', 29]);
   });
 });
-
