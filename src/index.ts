@@ -14,34 +14,33 @@ export interface AppConfig {
 
 // ---- Functions ----
 
-// TODO: add type annotation for the `user` parameter (noImplicitAny)
-export function formatUserName(user) {
-  return (user.name as string).toUpperCase();
+export function formatUserName(user: User): string {
+  return user.name.toUpperCase();
 }
 
-// TODO: handle the case when user is not found (strictNullChecks)
-export function getUserById(users: User[], id: string): string {
+export function getUserById(users: User[], id: string): string | undefined {
   const user = users.find((u) => u.id === id);
-  return user.name;
+  return user?.name ?? 'Unknown';
 }
 
-// TODO: account for empty arrays (noUncheckedIndexedAccess)
-export function getFirstElement(items: string[]): string {
+export function getFirstElement(items: string[]): string | undefined {
   return items[0];
 }
 
 // ---- Classes ----
 
-// TODO: initialize baseUrl properly (strictPropertyInitialization)
 export class ApiClient {
   baseUrl: string;
+
+  constructor(baseUrl: string) {
+    this.baseUrl = baseUrl;
+  }
 
   request(path: string): string {
     return `${this.baseUrl}${path}`;
   }
 }
 
-// TODO: add override keyword (noImplicitOverride)
 export class BaseLogger {
   log(msg: string): string {
     return `[LOG] ${msg}`;
@@ -56,12 +55,11 @@ export class PrefixLogger extends BaseLogger {
     this.prefix = prefix;
   }
 
-  log(msg: string): string {
+  override log(msg: string): string {
     return `[${this.prefix}] ${msg}`;
   }
 }
 
-// TODO: do not assign undefined explicitly to optional property (exactOptionalPropertyTypes)
 export function createConfig(port: number): AppConfig {
-  return { port, debug: undefined };
+  return { port };
 }

@@ -1,24 +1,15 @@
-# Exercise 18.1: Strict Mode Migration
+# Exercise 18.1: Strict Mode Migration — Solution
 
-## Goal
+## What was done
 
-Enable TypeScript strict flags step by step and fix every error that surfaces.
-
-## Task
-
-1. Open `tsconfig.json` — currently `strict` is `false` and extra flags are disabled.
-2. Enable `strict: true`, then `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitOverride`.
-3. Fix every type error that appears in `src/index.ts`.
-4. Make all tests pass.
-
-## What to fix
-
-- `formatUserName` — add parameter type
-- `getUserById` — handle missing user (return `'Unknown'`)
-- `getFirstElement` — adjust return type for empty arrays
-- `ApiClient` — initialize `baseUrl` via constructor
-- `PrefixLogger.log` — add `override`
-- `createConfig` — stop assigning `undefined` to optional property
+1. Enabled `strict: true`, `noUncheckedIndexedAccess`, `exactOptionalPropertyTypes`, `noImplicitOverride`
+2. Fixed all type errors:
+   - `formatUserName(user: User)` — explicit parameter type
+   - `getUserById` returns `string | undefined`, uses optional chaining
+   - `getFirstElement` returns `string | undefined`
+   - `ApiClient` — added constructor with `baseUrl` param
+   - `PrefixLogger.log` — added `override`
+   - `createConfig` — omit `debug` instead of assigning `undefined`
 
 ## Run locally
 
