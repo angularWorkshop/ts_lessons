@@ -1,15 +1,17 @@
-import { createLessonUser, sum } from '../../src/index';
+import { buildSession, fetchCourseMeta, logAction } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
-  });
+describe('types derived from functions', () => {
+  it('keeps runtime behavior intact', async () => {
+    expect(buildSession('user-1', 'student')).toEqual({
+      userId: 'user-1',
+      role: 'student',
+      createdAt: new Date('2026-01-01T00:00:00.000Z'),
+    });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
+    expect(logAction(['publish', 2])).toBe('publish:2');
+    await expect(fetchCourseMeta()).resolves.toEqual({
+      title: 'TypeScript',
+      lessons: 29,
     });
   });
 });
-

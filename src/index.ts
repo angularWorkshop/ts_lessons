@@ -1,26 +1,33 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
-
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
-}
-
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
-
-export function createLessonUser(name: string, email?: string): LessonUser {
+export function buildSession(userId: string, role: 'student' | 'mentor') {
   return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
+    userId,
+    role,
+    createdAt: new Date('2026-01-01T00:00:00.000Z'),
   };
 }
 
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
+export type Session = {
+  userId: string;
+  role: string;
+  createdAt: string;
+};
+
+export function runAction(action: string, retries: number): string {
+  return `${action}:${retries}`;
 }
 
+export function logAction(args: [string, number]): string {
+  return runAction(args[0], args[1]);
+}
+
+export async function fetchCourseMeta() {
+  return {
+    title: 'TypeScript',
+    lessons: 29,
+  };
+}
+
+export type CourseMeta = Promise<{
+  title: string;
+  lessons: number;
+}>;
