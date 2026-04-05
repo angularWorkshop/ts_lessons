@@ -1,6 +1,6 @@
 # Topic 3.2 — never and void
 
-This branch contains the starter for the second exercise in Topic 3.
+This branch contains the completed solution for the second exercise in Topic 3.
 
 ## Goal
 
@@ -8,9 +8,7 @@ Practice the difference between `never` and `void` in real functions.
 
 ## Task
 
-Finish `src/index.ts`.
-
-You need to:
+The final solution does the following:
 
 1. implement `throwError(message: string): never`
 2. implement `logMessage(message: string): void`
@@ -18,9 +16,9 @@ You need to:
 
 ## Requirements
 
-- `throwError` must always throw
-- `logMessage` must not return a useful value
-- the source file must mention both `void` and `undefined`
+- `throwError` always throws
+- `logMessage` does not return a useful value
+- the source file mentions both `void` and `undefined`
 - do not use `any`
 
 ## Run locally
