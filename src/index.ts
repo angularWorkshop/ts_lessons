@@ -1,26 +1,11 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type MyReturnType<T> = unknown;
 
-export type UserId = Brand<string, 'UserId'>;
+export type MyParameters<T> = unknown[];
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export function formatUser(name: string, age: number): string {
+  return `${name} (${age})`;
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function sumPrices(...prices: number[]): number {
+  return prices.reduce((total: number, price: number) => total + price, 0);
 }
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

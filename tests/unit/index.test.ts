@@ -1,15 +1,11 @@
-import { createLessonUser, sum } from '../../src/index';
+import { formatUser, sumPrices } from '../../src/index';
 
-describe('runtime baseline', () => {
-  it('sums numeric arrays', () => {
-    expect(sum([1, 2, 3, 4])).toBe(10);
+describe('function samples', () => {
+  it('formats a user label', () => {
+    expect(formatUser('Max', 29)).toBe('Max (29)');
   });
 
-  it('creates a user with a branded id', () => {
-    expect(createLessonUser('Max')).toEqual({
-      id: 'user:max',
-      name: 'Max',
-    });
+  it('sums prices', () => {
+    expect(sumPrices(10, 15, 25)).toBe(50);
   });
 });
-
