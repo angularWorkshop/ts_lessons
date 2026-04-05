@@ -33,10 +33,9 @@ void requiredProfile;
 void nullableProfile;
 void deepPartialProfile;
 
+const readonlyProfile = {} as MyReadonly<Profile>;
 // @ts-expect-error readonly properties must not be writable.
-((profile: MyReadonly<Profile>) => {
-  profile.id = 'new-id';
-})(null as unknown as MyReadonly<Profile>);
+readonlyProfile.id = 'new-id';
 
 test('type contracts compile', () => {
   expect(true).toBe(true);
