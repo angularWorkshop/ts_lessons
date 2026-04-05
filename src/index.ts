@@ -18,23 +18,27 @@ export interface JsonUser {
 export function ok<T>(value: T): Result<T, never> {
   return {
     kind: 'ok',
-    map: () => ok(value) as Result<unknown, never>,
+    map: <U>(fn: (currentValue: T) => U) => ok(fn(value)),
     mapErr: () => ok(value),
     match: (handlers) => handlers.ok(value),
-  } as Result<T, never>;
+  };
 }
 
 export function err<E>(error: E): Result<never, E> {
   return {
     kind: 'err',
     map: () => err(error),
-    mapErr: () => err(error) as Result<never, unknown>,
+    mapErr: <F>(fn: (currentError: E) => F) => err(fn(error)),
     match: (handlers) => handlers.err(error),
-  } as Result<never, E>;
+  };
 }
 
 export function parseJsonResult(raw: string): Result<unknown, string> {
-  return ok(JSON.parse(raw));
+  try {
+    return ok(JSON.parse(raw));
+  } catch {
+    return err('Invalid JSON');
+  }
 }
 
 export function getUserNameUppercase(raw: string): Result<string, string> {

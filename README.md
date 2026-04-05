@@ -1,27 +1,14 @@
-# Exercise 23.1: Result type
+# Exercise 23.1: Result type solution
 
-## Goal
+## What is implemented
 
-Practice type-safe error handling with `Result<T, E>` and replace thrown JSON parsing errors with an explicit typed contract.
+- `ok(value)` returns a successful `Result<T, never>`
+- `err(error)` returns a failed `Result<never, E>`
+- `map` transforms only the success branch
+- `mapErr` transforms only the error branch
+- `match` unwraps the value in a type-safe way
+- `parseJsonResult` converts invalid JSON into `err('Invalid JSON')`
 
-## Task
+## Outcome
 
-1. Implement `ok(value)` and `err(error)` factories.
-2. Implement `map`, `mapErr`, and `match` on `Result<T, E>`.
-3. Rewrite `parseJsonResult` so it returns `Result` instead of throwing.
-4. Keep the consumer chain free from `try/catch`.
-5. Make all tests pass.
-
-## Constraints
-
-- do not use `any`
-- `map` must transform only successful values
-- `mapErr` must transform only errors
-- invalid JSON must become a typed error value
-
-## Run locally
-
-```bash
-npm install
-npm run check
-```
+The consumer code can compose transformations without `try/catch`, while the error path stays explicit in the type system.
