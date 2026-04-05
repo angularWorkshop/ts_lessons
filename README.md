@@ -1,26 +1,12 @@
-# Exercise 24.1: `@Log` and `@Memoize`
+# Exercise 24.1: `@Log` and `@Memoize` solution
 
-## Goal
+## What is implemented
 
-Practice classic TypeScript method decorators by implementing logging and per-instance memoization.
+- `@Log()` records method calls as `methodName(arg1, arg2, ...)`
+- `@Memoize()` caches results by serialized arguments
+- cache storage is isolated per class instance via `WeakMap`
+- decorated methods keep their original return types
 
-## Task
+## Outcome
 
-1. Implement `@Log()` so it records the method name together with serialized arguments.
-2. Implement `@Memoize()` so repeated calls with the same arguments reuse the cached result.
-3. Apply both decorators to the provided `PricingService` class.
-4. Make all tests pass without changing the tests.
-
-## Constraints
-
-- use decorator syntax, not wrapper calls in plain functions
-- preserve the original method return types
-- memoization must be isolated per class instance
-- do not use `any`
-
-## Run locally
-
-```bash
-npm install
-npm run check
-```
+`PricingService` now demonstrates two common method decorators: one for observability and one for performance through repeat-call caching.

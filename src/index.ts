@@ -22,7 +22,8 @@ export function Log() {
     }
 
     descriptor.value = function (this: This, ...args: Args): Return {
-      this.logs.push(`${String(propertyKey)}()`);
+      const serializedArgs = args.map((arg) => serializeArg(arg)).join(', ');
+      this.logs.push(`${String(propertyKey)}(${serializedArgs})`);
       return originalMethod.apply(this, args);
     };
 
@@ -31,11 +32,38 @@ export function Log() {
 }
 
 export function Memoize() {
+  const cacheByInstance = new WeakMap<object, Map<string, unknown>>();
+
   return function <This, Args extends unknown[], Return>(
     _target: object,
     _propertyKey: string | symbol,
     descriptor: TypedPropertyDescriptor<ClassMethod<This, Args, Return>>,
   ): TypedPropertyDescriptor<ClassMethod<This, Args, Return>> {
+    const originalMethod = descriptor.value;
+
+    if (!originalMethod) {
+      return descriptor;
+    }
+
+    descriptor.value = function (this: This, ...args: Args): Return {
+      const instance = this as object;
+      const cacheKey = JSON.stringify(args);
+      const instanceCache = cacheByInstance.get(instance) ?? new Map<string, unknown>();
+
+      if (!cacheByInstance.has(instance)) {
+        cacheByInstance.set(instance, instanceCache);
+      }
+
+      if (instanceCache.has(cacheKey)) {
+        return instanceCache.get(cacheKey) as Return;
+      }
+
+      const result = originalMethod.apply(this, args);
+      instanceCache.set(cacheKey, result);
+
+      return result;
+    };
+
     return descriptor;
   };
 }
