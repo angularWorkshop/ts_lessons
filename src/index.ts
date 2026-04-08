@@ -10,14 +10,14 @@ export interface AppEnv {
 }
 
 export const envSchema = z.object({
-  DATABASE_URL: z.string(),
-  PORT: z.string(),
+  DATABASE_URL: z.string().url(),
+  PORT: z.coerce.number().int().positive(),
   NODE_ENV: z.enum(['development', 'test', 'production']),
-  ENABLE_CACHE: z.enum(['true', 'false']),
+  ENABLE_CACHE: z.enum(['true', 'false']).transform((value) => value === 'true'),
 });
 
 export function parseEnv(source: EnvSource): AppEnv {
-  return envSchema.parse(source) as unknown as AppEnv;
+  return envSchema.parse(source);
 }
 
 export function createEnv(source: EnvSource): AppEnv {

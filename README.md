@@ -1,27 +1,13 @@
-# Exercise 25.2: typed environment with Zod
+# Exercise 25.2: typed environment with Zod solution
 
-## Goal
+## What is implemented
 
-Practice runtime validation of environment variables, derive the final TypeScript type from the schema, and expose a typed `env` object.
+- environment variables are described with a `zod` schema
+- `DATABASE_URL` is validated as a URL
+- `PORT` is coerced into a number
+- `ENABLE_CACHE` is transformed into a boolean
+- `createEnv` returns a fully typed `AppEnv`
 
-## Task
+## Outcome
 
-1. Describe the required environment variables with a `zod` schema.
-2. Parse raw env input at startup.
-3. Convert string values into final runtime types where needed.
-4. Export helpers that return a fully typed env object.
-5. Make all tests pass.
-
-## Constraints
-
-- input must be `Record<string, string | undefined>`
-- invalid env must fail with a readable `ZodError`
-- `PORT` must become a number
-- `ENABLE_CACHE` must become a boolean
-
-## Run locally
-
-```bash
-npm install
-npm run check
-```
+The application startup now fails fast on bad environment configuration, while the rest of the codebase gets a typed env object instead of raw strings.
