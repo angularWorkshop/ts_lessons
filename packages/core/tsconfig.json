@@ -6,6 +6,6 @@
     "outDir": "./dist",
     "tsBuildInfoFile": "./dist/.tsbuildinfo"
   },
-  "include": ["src/**/*.ts"]
-  // TODO: add a project reference to @app/shared
+  "include": ["src/**/*.ts"],
+  "references": [{ "path": "../shared" }]
 }
