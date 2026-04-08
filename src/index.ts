@@ -49,6 +49,10 @@ function readMetric(report: string, pattern: RegExp): number {
   return Number(match[1]);
 }
 
+function roundToTwoDecimals(value: number): number {
+  return Number(value.toFixed(2));
+}
+
 export function parseExtendedDiagnostics(report: string): CompilerDiagnostics {
   return {
     files: readMetric(report, reportPatterns.files),
@@ -57,11 +61,11 @@ export function parseExtendedDiagnostics(report: string): CompilerDiagnostics {
     symbols: readMetric(report, reportPatterns.symbols),
     types: readMetric(report, reportPatterns.types),
     instantiations: readMetric(report, reportPatterns.instantiations),
-    memoryUsedMb: readMetric(report, reportPatterns.memoryUsedMb),
-    parseTimeMs: readMetric(report, reportPatterns.parseTimeMs),
-    bindTimeMs: readMetric(report, reportPatterns.bindTimeMs),
-    checkTimeMs: readMetric(report, reportPatterns.checkTimeMs),
-    totalTimeMs: readMetric(report, reportPatterns.totalTimeMs),
+    memoryUsedMb: roundToTwoDecimals(readMetric(report, reportPatterns.memoryUsedMb) / 1000),
+    parseTimeMs: Math.round(readMetric(report, reportPatterns.parseTimeMs) * 1000),
+    bindTimeMs: Math.round(readMetric(report, reportPatterns.bindTimeMs) * 1000),
+    checkTimeMs: Math.round(readMetric(report, reportPatterns.checkTimeMs) * 1000),
+    totalTimeMs: Math.round(readMetric(report, reportPatterns.totalTimeMs) * 1000),
   };
 }
 
@@ -74,16 +78,18 @@ export function compareBuildRuns(
 
   return {
     savedMs,
-    faster: savedMs >= 0,
-    improvementPercent,
+    faster: savedMs > 0,
+    improvementPercent: roundToTwoDecimals(improvementPercent),
   };
 }
 
 export function optimizeCompilerProfile(config: CompilerConfigProfile): CompilerConfigProfile {
   return {
-    ...config,
-    incremental: false,
-    include: config.include ?? ['src/**/*'],
-    exclude: config.exclude ?? ['dist'],
+    incremental: true,
+    tsBuildInfoFile: config.tsBuildInfoFile ?? '.tsbuildinfo',
+    include: (config.include ?? ['src/**/*.ts', 'tests/**/*.ts']).filter(
+      (pattern) => pattern === 'src/**/*.ts' || pattern === 'tests/**/*.ts',
+    ),
+    exclude: ['dist', 'coverage', 'node_modules'],
   };
 }

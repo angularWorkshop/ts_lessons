@@ -1,26 +1,13 @@
-# Exercise 26.1: compiler diagnostics and optimization
+# Exercise 26.1: compiler diagnostics and optimization solution
 
-## Goal
+## What is implemented
 
-Practice reading `tsc --extendedDiagnostics` output, comparing cold and repeated builds, and assembling a more predictable TypeScript compiler profile.
+- raw `extendedDiagnostics` output is parsed into structured numeric metrics
+- memory is converted from kilobytes to megabytes
+- timing metrics are normalized into milliseconds
+- cold and repeated builds can be compared through saved time and improvement percent
+- an optimized compiler profile enables `incremental`, narrows `include`, and adds `.tsbuildinfo`
 
-## Task
+## Outcome
 
-1. Parse a raw `extendedDiagnostics` report into structured metrics.
-2. Compare a cold build against a repeated build and compute the improvement.
-3. Build an optimized compiler config profile with incremental compilation enabled.
-4. Make all tests pass.
-
-## Constraints
-
-- do not use `any`
-- parse metrics from a plain multiline string
-- preserve existing useful config fields while optimizing
-- repeated build must be recognized as faster only when the total time actually drops
-
-## Run locally
-
-```bash
-npm install
-npm run check
-```
+The exercise now models the practical workflow from the topic: inspect diagnostics, compare cold versus repeated builds, and move toward a more predictable compiler config.
