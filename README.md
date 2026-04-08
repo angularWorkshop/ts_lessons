@@ -1,53 +1,48 @@
-# ts_lessons
+# Capstone 3: Type-Safe Mini-Framework
 
-Base repository for EduTec TypeScript course exercises.
+Build a publish-ready mini-framework around a type-safe router.
 
-Each exercise should branch from `main` into:
+Project requirements:
 
-- `lesson-topic-XX-exercise-YY-slug`
-- `answer-topic-XX-exercise-YY-slug`
+- `Router<Routes>` with route-name and route-input inference
+- branded types for framework entities
+- `Result`-based error handling
+- Zod validation for route inputs
+- decorators for logging and caching
+- type tests for the public API
+- dual ESM/CJS package that survives `npm pack`
 
-The repository is intentionally framework-agnostic. It provides:
+Current lesson state:
 
-- strict TypeScript configuration
-- unit tests via Vitest
-- type tests via `expectTypeOf`
-- library-ready build via `tsup`
-- package validation via `npm pack`
+- the public API surface is scaffolded
+- branded helpers, `Result`, decorators, and route definitions are in place
+- package publishing config is already wired
+- the core router behavior is still incomplete
 
-## Production standard
+Your task:
 
-- branch format and task rules: [EXERCISE_STANDARD.md](EXERCISE_STANDARD.md)
-- reusable starter files: [`templates/exercise/`](templates/exercise)
+1. Implement `buildPath()` so it validates route input and resolves a final path.
+2. Implement `navigate()` so it returns a typed navigation record wrapped in `Result`.
+3. Keep Zod parsing, branded outputs, caching, and logging behavior intact.
+4. Ensure `npm run check` and `npm run pack:check` both pass.
 
-Recommended workflow for a new exercise:
+Acceptance criteria:
 
-1. Branch from `main` into `lesson-topic-XX-exercise-YY-slug`.
-2. Copy the files from `templates/exercise/` into the repository root.
-3. Adapt `README.md`, `src/index.ts`, and tests for the specific task.
-4. Ensure lesson branch has failing tests for unfinished `TODO`s.
-5. Create `answer-topic-XX-exercise-YY-slug` from the lesson branch and finish the solution.
+- invalid route input returns `Err`
+- valid navigation returns branded route data
+- repeated path builds reuse cached results
+- logs record decorated router calls
+- the package builds and packs as a dual-mode library
 
-## Scripts
-
-- `npm run build` — build ESM, CJS and declarations into `dist/`
-- `npm run typecheck` — run TypeScript without emitting files
-- `npm run test` — run Vitest once
-- `npm run test:watch` — run Vitest in watch mode
-- `npm run check` — run typecheck and tests
-- `npm run pack:check` — create a package tarball locally
-
-## Suggested exercise layout
-
-- `src/` — starter or answer implementation
-- `tests/unit/` — behavioral tests
-- `tests/types/` — type-level assertions
-- `README.md` — exercise brief and local run instructions
-
-## Local workflow
+Local verification:
 
 ```bash
-npm install
-npm run check
-npm run build
+PATH="$HOME/.nvm/versions/node/v24.13.0/bin:$PATH" \
+~/.nvm/versions/node/v24.13.0/bin/node \
+~/.nvm/versions/node/v24.13.0/lib/node_modules/npm/bin/npm-cli.js run check
+
+PATH="$HOME/.nvm/versions/node/v24.13.0/bin:$PATH" \
+npm_config_cache=/tmp/npm-cache-ts-lessons \
+~/.nvm/versions/node/v24.13.0/bin/node \
+~/.nvm/versions/node/v24.13.0/lib/node_modules/npm/bin/npm-cli.js run pack:check
 ```
