@@ -1,4 +1,6 @@
-export function calculateDiscount(subtotalCents, coupon) {
+import type { Coupon } from '../contracts.js';
+
+export function calculateDiscount(subtotalCents: number, coupon?: Coupon): number {
   if (!coupon) {
     return 0;
   }

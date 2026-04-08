@@ -1,27 +1,12 @@
-# Exercise 27.1: migrate a JS module to TypeScript
+# Exercise 27.1: migrate a JS module to TypeScript solution
 
-## Goal
+## What is implemented
 
-Practice incremental migration of a small JavaScript module into TypeScript while preserving behavior and tightening the public API.
+- the legacy module was migrated from `.js` files to `.ts` files
+- shared domain contracts are reused across every file
+- invalid shipping zones and malformed line items now fail at compile time
+- runtime behavior stayed unchanged during the migration
 
-## Task
+## Outcome
 
-1. Migrate the module in `src/legacy/` from `.js` files to `.ts` files.
-2. Replace loose JavaScript inference with explicit TypeScript types.
-3. Remove broad parameter acceptance so invalid calls fail at compile time.
-4. Keep the runtime behavior intact.
-5. Make all tests pass.
-
-## Constraints
-
-- do not use `any`
-- preserve the existing module behavior
-- finish with a type-safe public API
-- the migrated module should still be split into small focused files
-
-## Run locally
-
-```bash
-npm install
-npm run check
-```
+The exercise now shows a realistic incremental migration path: preserve the module structure, convert files one by one, and tighten the API until invalid calls stop compiling.
