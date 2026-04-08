@@ -1,53 +1,37 @@
-# ts_lessons
+# Topic 28.1: TypeScript Monorepo
 
-Base repository for EduTec TypeScript course exercises.
+Build a small TypeScript monorepo for an analytics dashboard.
 
-Each exercise should branch from `main` into:
+Packages:
 
-- `lesson-topic-XX-exercise-YY-slug`
-- `answer-topic-XX-exercise-YY-slug`
+- `@app/shared` — shared domain types and formatting helpers
+- `@app/core` — dashboard assembly logic on top of shared utilities
+- `@app/web` — presentation layer that consumes the core package
 
-The repository is intentionally framework-agnostic. It provides:
+Current state:
 
-- strict TypeScript configuration
-- unit tests via Vitest
-- type tests via `expectTypeOf`
-- library-ready build via `tsup`
-- package validation via `npm pack`
+- the package source code is already in place
+- the root repository exposes the public API through `src/index.ts`
+- `vitest` is configured to resolve workspace aliases
+- `tsc -b` currently fails because the project references are incomplete
 
-## Production standard
+Your task:
 
-- branch format and task rules: [EXERCISE_STANDARD.md](EXERCISE_STANDARD.md)
-- reusable starter files: [`templates/exercise/`](templates/exercise)
+1. Fix the `Project References` configuration so `tsc -b` can build the whole workspace.
+2. Keep the dependency graph one-way: `shared -> core -> web`.
+3. Ensure changes in `@app/shared` are visible from `@app/core` and `@app/web` without manual copying.
 
-Recommended workflow for a new exercise:
+Acceptance criteria:
 
-1. Branch from `main` into `lesson-topic-XX-exercise-YY-slug`.
-2. Copy the files from `templates/exercise/` into the repository root.
-3. Adapt `README.md`, `src/index.ts`, and tests for the specific task.
-4. Ensure lesson branch has failing tests for unfinished `TODO`s.
-5. Create `answer-topic-XX-exercise-YY-slug` from the lesson branch and finish the solution.
+- `npm run typecheck` passes
+- `npm run test` passes
+- `npm run build` builds all projects with `tsc -b`
+- there are no circular dependencies between packages
 
-## Scripts
-
-- `npm run build` — build ESM, CJS and declarations into `dist/`
-- `npm run typecheck` — run TypeScript without emitting files
-- `npm run test` — run Vitest once
-- `npm run test:watch` — run Vitest in watch mode
-- `npm run check` — run typecheck and tests
-- `npm run pack:check` — create a package tarball locally
-
-## Suggested exercise layout
-
-- `src/` — starter or answer implementation
-- `tests/unit/` — behavioral tests
-- `tests/types/` — type-level assertions
-- `README.md` — exercise brief and local run instructions
-
-## Local workflow
+Local check:
 
 ```bash
-npm install
-npm run check
-npm run build
+PATH="$HOME/.nvm/versions/node/v24.13.0/bin:$PATH" \
+~/.nvm/versions/node/v24.13.0/bin/node \
+~/.nvm/versions/node/v24.13.0/lib/node_modules/npm/bin/npm-cli.js run check
 ```
