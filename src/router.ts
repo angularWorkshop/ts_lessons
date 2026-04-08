@@ -8,7 +8,7 @@ import {
   type RoutePath,
 } from './brands';
 import { cached, logged, type LogSink } from './decorators';
-import { err, isErr, type Result } from './result';
+import { err, isErr, ok, type Result } from './result';
 
 const emptyObjectSchema = z.object({});
 
@@ -138,12 +138,19 @@ export class Router<Routes extends RouteMap> implements LogSink {
 
     this.stats.pathBuilds += 1;
 
-    return err(
-      createFrameworkError(
-        'ROUTE_BUILD_FAILED',
-        'TODO: implement path resolution for the capstone router',
-      ),
+    const resolvedPath = this.resolvePath(
+      validated.value.route.path,
+      validated.value.params as Record<string, unknown>,
     );
+
+    if (isErr(resolvedPath)) {
+      return resolvedPath;
+    }
+
+    const query = this.buildQuery(validated.value.search as Record<string, unknown>);
+    const fullPath = query.length > 0 ? `${resolvedPath.value}?${query}` : resolvedPath.value;
+
+    return ok(createRoutePath(fullPath));
   }
 
   @logged('navigate')
@@ -151,17 +158,20 @@ export class Router<Routes extends RouteMap> implements LogSink {
     name: Name,
     input: NavigationInput<Routes[Name]>,
   ): Result<NavigationSuccess<Name, Routes[Name]>, FrameworkError> {
+    const pathResult = this.buildPath(name, input);
+
+    if (isErr(pathResult)) {
+      return pathResult;
+    }
+
     const validated = this.validateInput(name, input);
 
     if (isErr(validated)) {
       return validated;
     }
 
-    return err(
-      createFrameworkError(
-        'ROUTE_BUILD_FAILED',
-        'TODO: implement navigation records for the capstone router',
-      ),
+    return ok(
+      createRouteRecord(name, pathResult.value, validated.value),
     );
   }
 
@@ -207,6 +217,50 @@ export class Router<Routes extends RouteMap> implements LogSink {
         search: parsedSearch.data as RouteSearch<Routes[Name]>,
       },
     };
+  }
+
+  private resolvePath(
+    template: string,
+    params: Record<string, unknown>,
+  ): Result<string, FrameworkError> {
+    const missingKeys: string[] = [];
+
+    const resolved = template.replace(/:([a-zA-Z0-9_]+)/g, (_match, key: string) => {
+      const value = params[key];
+
+      if (value === undefined) {
+        missingKeys.push(key);
+        return '';
+      }
+
+      return encodeURIComponent(String(value));
+    });
+
+    if (missingKeys.length > 0) {
+      return err(
+        createFrameworkError(
+          'MISSING_PARAM',
+          `Missing params: ${missingKeys.join(', ')}`,
+          missingKeys,
+        ),
+      );
+    }
+
+    return ok(resolved);
+  }
+
+  private buildQuery(search: Record<string, unknown>): string {
+    const query = new URLSearchParams();
+
+    for (const [key, value] of Object.entries(search)) {
+      if (value === undefined) {
+        continue;
+      }
+
+      query.set(key, String(value));
+    }
+
+    return query.toString();
   }
 }
 
