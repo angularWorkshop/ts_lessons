@@ -1,26 +1,25 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+import { z } from 'zod';
 
-export type UserId = Brand<string, 'UserId'>;
+export type EnvSource = Record<string, string | undefined>;
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export interface AppEnv {
+  DATABASE_URL: string;
+  PORT: number;
+  NODE_ENV: 'development' | 'test' | 'production';
+  ENABLE_CACHE: boolean;
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export const envSchema = z.object({
+  DATABASE_URL: z.string(),
+  PORT: z.string(),
+  NODE_ENV: z.enum(['development', 'test', 'production']),
+  ENABLE_CACHE: z.enum(['true', 'false']),
+});
+
+export function parseEnv(source: EnvSource): AppEnv {
+  return envSchema.parse(source) as unknown as AppEnv;
 }
 
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
+export function createEnv(source: EnvSource): AppEnv {
+  return parseEnv(source);
 }
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-

@@ -1,12 +1,20 @@
 import { expectTypeOf } from 'vitest';
-import { createLessonUser, createUserId, type LessonUser, type UserId } from '../../src/index';
+import { createEnv, envSchema, parseEnv, type AppEnv, type EnvSource } from '../../src/index';
 
-describe('type baseline', () => {
-  it('preserves branded ids', () => {
-    expectTypeOf(createUserId('user:max')).toEqualTypeOf<UserId>();
+describe('env typing', () => {
+  it('exposes a typed env object', () => {
+    const source: EnvSource = {
+      DATABASE_URL: 'https://db.example.com',
+      PORT: '3000',
+      NODE_ENV: 'test',
+      ENABLE_CACHE: 'true',
+    };
+
+    expectTypeOf(createEnv(source)).toEqualTypeOf<AppEnv>();
   });
 
-  it('infers lesson user shape', () => {
-    expectTypeOf(createLessonUser('Max')).toEqualTypeOf<LessonUser>();
+  it('types the exported helpers and schema', () => {
+    expectTypeOf(envSchema).toBeObject();
+    expectTypeOf(parseEnv).returns.toEqualTypeOf<AppEnv>();
   });
 });
