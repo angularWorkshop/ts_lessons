@@ -1,26 +1,26 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+import { z } from 'zod';
 
-export type UserId = Brand<string, 'UserId'>;
+export const userApiResponseSchema = z.object({
+  id: z.string(),
+  email: z.string(),
+  role: z.enum(['admin', 'editor', 'viewer']),
+  profile: z.object({
+    displayName: z.string(),
+    newsletter: z.boolean(),
+  }),
+});
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export type UserApiResponse = z.infer<typeof userApiResponseSchema>;
+
+export type UserApiValidationResult = ReturnType<typeof userApiResponseSchema.safeParse>;
+
+export function validateUserApiResponse(input: unknown): UserApiValidationResult {
+  return userApiResponseSchema.safeParse(input);
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
-}
+export function getUserWelcomeLabel(input: unknown): string | null {
+  const parsed = validateUserApiResponse(input);
+  const user = (parsed as { data: UserApiResponse }).data;
 
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
+  return `${user.profile.displayName} (${user.role})`;
 }
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
