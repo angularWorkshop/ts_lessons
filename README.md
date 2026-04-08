@@ -1,53 +1,41 @@
-# ts_lessons
+# Topic 29.1: Publish a Mini TypeScript Library
 
-Base repository for EduTec TypeScript course exercises.
+Prepare a small utility library for distribution.
 
-Each exercise should branch from `main` into:
+The library should expose:
 
-- `lesson-topic-XX-exercise-YY-slug`
-- `answer-topic-XX-exercise-YY-slug`
+- branded primitive helpers
+- a `Result` type with runtime constructors and guards
+- a recursive `DeepReadonly` utility type
 
-The repository is intentionally framework-agnostic. It provides:
+Current state:
 
-- strict TypeScript configuration
-- unit tests via Vitest
-- type tests via `expectTypeOf`
-- library-ready build via `tsup`
-- package validation via `npm pack`
+- the public API is already implemented in `src/index.ts`
+- runtime and type tests cover the library surface
+- the package manifest is still incomplete for publishing
 
-## Production standard
+Your task:
 
-- branch format and task rules: [EXERCISE_STANDARD.md](EXERCISE_STANDARD.md)
-- reusable starter files: [`templates/exercise/`](templates/exercise)
+1. Finish the package publishing configuration.
+2. Make the package work for both `import` and `require`.
+3. Ensure type checks run automatically before `npm pack`.
+4. Keep the generated declarations and package entrypoints aligned.
 
-Recommended workflow for a new exercise:
+Acceptance criteria:
 
-1. Branch from `main` into `lesson-topic-XX-exercise-YY-slug`.
-2. Copy the files from `templates/exercise/` into the repository root.
-3. Adapt `README.md`, `src/index.ts`, and tests for the specific task.
-4. Ensure lesson branch has failing tests for unfinished `TODO`s.
-5. Create `answer-topic-XX-exercise-YY-slug` from the lesson branch and finish the solution.
+- `npm run check` passes
+- `npm run build` produces ESM, CJS and `.d.ts`
+- `npm run pack:check` succeeds
+- the package manifest contains a correct exports map and prepack hook
 
-## Scripts
-
-- `npm run build` — build ESM, CJS and declarations into `dist/`
-- `npm run typecheck` — run TypeScript without emitting files
-- `npm run test` — run Vitest once
-- `npm run test:watch` — run Vitest in watch mode
-- `npm run check` — run typecheck and tests
-- `npm run pack:check` — create a package tarball locally
-
-## Suggested exercise layout
-
-- `src/` — starter or answer implementation
-- `tests/unit/` — behavioral tests
-- `tests/types/` — type-level assertions
-- `README.md` — exercise brief and local run instructions
-
-## Local workflow
+Local verification:
 
 ```bash
-npm install
-npm run check
-npm run build
+PATH="$HOME/.nvm/versions/node/v24.13.0/bin:$PATH" \
+~/.nvm/versions/node/v24.13.0/bin/node \
+~/.nvm/versions/node/v24.13.0/lib/node_modules/npm/bin/npm-cli.js run check
+
+PATH="$HOME/.nvm/versions/node/v24.13.0/bin:$PATH" \
+~/.nvm/versions/node/v24.13.0/bin/node \
+~/.nvm/versions/node/v24.13.0/lib/node_modules/npm/bin/npm-cli.js run pack:check
 ```
