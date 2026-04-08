@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 export const userApiResponseSchema = z.object({
   id: z.string(),
-  email: z.string(),
+  email: z.string().email(),
   role: z.enum(['admin', 'editor', 'viewer']),
   profile: z.object({
     displayName: z.string(),
@@ -20,7 +20,10 @@ export function validateUserApiResponse(input: unknown): UserApiValidationResult
 
 export function getUserWelcomeLabel(input: unknown): string | null {
   const parsed = validateUserApiResponse(input);
-  const user = (parsed as { data: UserApiResponse }).data;
 
-  return `${user.profile.displayName} (${user.role})`;
+  if (!parsed.success) {
+    return null;
+  }
+
+  return `${parsed.data.profile.displayName} (${parsed.data.role})`;
 }

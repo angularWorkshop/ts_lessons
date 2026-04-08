@@ -1,27 +1,13 @@
-# Exercise 25.1: API response validation with Zod
+# Exercise 25.1: API response validation with Zod solution
 
-## Goal
+## What is implemented
 
-Practice runtime validation with `zod`, infer TypeScript types from the schema, and handle invalid payloads through `safeParse`.
+- the API payload is described with a `zod` schema
+- the `UserApiResponse` type is inferred via `z.infer`
+- validation is done with `safeParse`
+- invalid payloads return a failed result instead of throwing
+- `getUserWelcomeLabel` returns `null` for invalid input
 
-## Task
+## Outcome
 
-1. Describe the API response with a `zod` schema.
-2. Infer the TypeScript type from the schema via `z.infer`.
-3. Validate unknown input with `safeParse`.
-4. Return a safe display label only for valid payloads.
-5. Make all tests pass.
-
-## Constraints
-
-- do not use `any`
-- keep the API input type as `unknown`
-- invalid payloads must not throw
-- role and email must be validated by the schema
-
-## Run locally
-
-```bash
-npm install
-npm run check
-```
+The runtime contract and the TypeScript type now come from the same schema, which removes drift between compile-time assumptions and real API data.
