@@ -1,75 +1,40 @@
-import {
-  compareBuildRuns,
-  optimizeCompilerProfile,
-  parseExtendedDiagnostics,
-} from '../../src/index';
+import { buildOrderReceipt, calculateDiscount, calculateSubtotal, formatCents, getShippingCost } from '../../src/index.js';
 
-const coldBuildReport = `Files:                         121
-Lines of Library:            40212
-Identifiers:                 61234
-Symbols:                     48210
-Types:                       22654
-Instantiations:               3450
-Memory used:                87542K
-Parse time:                  0.82
-Bind time:                   0.39
-Check time:                  1.74
-Total time:                  3.28`;
-
-const repeatedBuildReport = `Files:                         121
-Lines of Library:            40212
-Identifiers:                 61234
-Symbols:                     48210
-Types:                       22654
-Instantiations:               3450
-Memory used:                61200K
-Parse time:                  0.24
-Bind time:                   0.08
-Check time:                  0.61
-Total time:                  1.17`;
-
-describe('parseExtendedDiagnostics', () => {
-  it('extracts numeric metrics from a diagnostics report', () => {
-    expect(parseExtendedDiagnostics(coldBuildReport)).toEqual({
-      files: 121,
-      lines: 40212,
-      identifiers: 61234,
-      symbols: 48210,
-      types: 22654,
-      instantiations: 3450,
-      memoryUsedMb: 87.54,
-      parseTimeMs: 820,
-      bindTimeMs: 390,
-      checkTimeMs: 1740,
-      totalTimeMs: 3280,
-    });
-  });
-});
-
-describe('compareBuildRuns', () => {
-  it('reports repeated build improvement', () => {
-    const cold = parseExtendedDiagnostics(coldBuildReport);
-    const repeated = parseExtendedDiagnostics(repeatedBuildReport);
-
-    expect(compareBuildRuns(cold, repeated)).toEqual({
-      savedMs: 2110,
-      faster: true,
-      improvementPercent: 64.33,
-    });
-  });
-});
-
-describe('optimizeCompilerProfile', () => {
-  it('enables incremental compilation and narrows include/exclude', () => {
+describe('legacy module runtime behavior', () => {
+  it('calculates subtotal and formats cents', () => {
     expect(
-      optimizeCompilerProfile({
-        include: ['src/**/*.ts', 'tests/**/*.ts', 'scripts/**/*.ts'],
-      }),
+      calculateSubtotal([
+        { sku: 'A', quantity: 2, priceCents: 1500 },
+        { sku: 'B', quantity: 1, priceCents: 4000 },
+      ]),
+    ).toBe(7000);
+
+    expect(formatCents(7000)).toBe('$70.00');
+  });
+
+  it('calculates discount and shipping', () => {
+    expect(calculateDiscount(7000, { type: 'percent', value: 10 })).toBe(700);
+    expect(calculateDiscount(7000, { type: 'fixed', value: 2500 })).toBe(2500);
+    expect(getShippingCost('local', 3)).toBe(700);
+  });
+
+  it('builds an order receipt', () => {
+    expect(
+      buildOrderReceipt(
+        [
+          { sku: 'A', quantity: 2, priceCents: 1500 },
+          { sku: 'B', quantity: 1, priceCents: 4000 },
+        ],
+        'intl',
+        { type: 'percent', value: 10 },
+      ),
     ).toEqual({
-      incremental: true,
-      tsBuildInfoFile: '.tsbuildinfo',
-      include: ['src/**/*.ts', 'tests/**/*.ts'],
-      exclude: ['dist', 'coverage', 'node_modules'],
+      itemCount: 3,
+      subtotalCents: 7000,
+      discountCents: 700,
+      shippingCents: 1700,
+      totalCents: 8000,
+      summaryLabel: '3 items • $80.00',
     });
   });
 });

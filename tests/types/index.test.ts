@@ -1,48 +1,33 @@
-import { expectTypeOf } from 'vitest';
+import { expect, test } from 'vitest';
 import {
-  compareBuildRuns,
-  optimizeCompilerProfile,
-  parseExtendedDiagnostics,
-  type BuildComparison,
-  type CompilerConfigProfile,
-  type CompilerDiagnostics,
-} from '../../src/index';
+  buildOrderReceipt,
+  calculateDiscount,
+  calculateSubtotal,
+  formatCents,
+  getShippingCost,
+  type Coupon,
+  type LineItem,
+  type OrderReceipt,
+  type ShippingZone,
+} from '../../src/index.js';
 
-describe('compiler diagnostics typing', () => {
-  it('returns structured diagnostics and comparison shapes', () => {
-    const diagnostics = parseExtendedDiagnostics('Files: 1\nTotal time: 0.01');
-    const comparison = compareBuildRuns(
-      {
-        files: 1,
-        lines: 1,
-        identifiers: 1,
-        symbols: 1,
-        types: 1,
-        instantiations: 1,
-        memoryUsedMb: 1,
-        parseTimeMs: 1,
-        bindTimeMs: 1,
-        checkTimeMs: 1,
-        totalTimeMs: 2,
-      },
-      {
-        files: 1,
-        lines: 1,
-        identifiers: 1,
-        symbols: 1,
-        types: 1,
-        instantiations: 1,
-        memoryUsedMb: 1,
-        parseTimeMs: 1,
-        bindTimeMs: 1,
-        checkTimeMs: 1,
-        totalTimeMs: 1,
-      },
-    );
-    const optimized = optimizeCompilerProfile({});
+const items: LineItem[] = [
+  { sku: 'A', quantity: 2, priceCents: 1500 },
+  { sku: 'B', quantity: 1, priceCents: 4000 },
+];
 
-    expectTypeOf(diagnostics).toEqualTypeOf<CompilerDiagnostics>();
-    expectTypeOf(comparison).toEqualTypeOf<BuildComparison>();
-    expectTypeOf(optimized).toEqualTypeOf<CompilerConfigProfile>();
-  });
+const zone: ShippingZone = 'local';
+const coupon: Coupon = { type: 'percent', value: 10 };
+const receipt: OrderReceipt = buildOrderReceipt(items, zone, coupon);
+
+void receipt;
+
+// @ts-expect-error shipping zone must be a strict union.
+buildOrderReceipt(items, 'moon-base', coupon);
+
+// @ts-expect-error quantity must stay numeric during migration.
+calculateSubtotal([{ sku: 'A', quantity: '2', priceCents: 1500 }]);
+
+test('type contracts compile', () => {
+  expect(true).toBe(true);
 });
