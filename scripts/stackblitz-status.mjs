@@ -83,7 +83,7 @@ async function executeChecks(reason) {
   console.log(colorize('dim', `Reason: ${reason}`));
 
   const typecheck = await runCommand('TypeScript', 'node', ['./node_modules/typescript/bin/tsc', '--noEmit', '--pretty', 'true']);
-  const tests = await runCommand('Vitest', 'node', ['./node_modules/vitest/vitest.mjs', 'run', '--reporter=basic']);
+  const tests = await runCommand('Vitest', 'node', ['./node_modules/vitest/vitest.mjs', 'run', '--reporter=default']);
 
   if (typecheck.code !== 0) {
     printHeading('TYPE ERRORS', 'red');

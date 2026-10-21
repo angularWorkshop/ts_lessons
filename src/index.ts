@@ -1,26 +1,39 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+import type { User, Post } from './models.js';
+import { ApiError, buildUrl, decodePayload, localTransport } from './transport.js';
+import type { ApiTransport } from './transport.js';
+export type { User, Post } from './models.js';
+export type { ApiTransport } from './transport.js';
+export { ApiError } from './transport.js';
 
-export type UserId = Brand<string, 'UserId'>;
+export type ApiResponse<T> =
+  | { status: 'success'; data: T }
+  | { status: 'error'; error: string; code: number };
 
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export type Endpoint = {
+  '/users': { response: User[]; params: { role?: User['role'] } };
+  '/users/:id': { response: User; params: { id: string } };
+  '/posts': { response: Post[]; params: { authorId?: string } };
+};
+
+// This helper is supplied; the detail route needs an id, list routes do not.
+export type ApiGetArgs<E extends keyof Endpoint> = E extends '/users/:id'
+  ? [params: Endpoint[E]['params'], transport?: ApiTransport]
+  : [params?: Endpoint[E]['params'], transport?: ApiTransport];
+
+export function isSuccess<T>(response: ApiResponse<T>): response is Extract<ApiResponse<T>, { status: 'success' }> {
+  return response.status === 'success';
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export async function apiGet<E extends keyof Endpoint>(
+  endpoint: E, ...args: ApiGetArgs<E>
+): Promise<ApiResponse<Endpoint[E]['response']>> {
+  const [params, transport = localTransport] = args;
+  try {
+    const url = buildUrl(endpoint, params);
+    const payload = await transport(url);
+    return { status: 'success', data: decodePayload(endpoint, payload) };
+  } catch (error: unknown) {
+    return { status: 'error', error: error instanceof Error ? error.message : 'Request failed',
+      code: error instanceof ApiError ? error.code : 500 };
+  }
 }
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
