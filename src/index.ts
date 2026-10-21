@@ -1,26 +1,25 @@
-export type Brand<T, Name extends string> = T & { readonly __brand: Name };
+export type ValidationRule<V> = (value: V) => string | null;
+export type ValidationSchema<T extends object> = { [K in keyof T]-?: readonly ValidationRule<T[K]>[] };
+export type ValidationResult<T> =
+  | { valid: true; data: T }
+  | { valid: false; errors: Partial<Record<keyof T, string>> };
 
-export type UserId = Brand<string, 'UserId'>;
-
-export interface LessonUser {
-  id: UserId;
-  name: string;
-  email?: string;
+export function isValid<T>(result: ValidationResult<T>): result is Extract<ValidationResult<T>, { valid: true }> {
+  return result.valid;
 }
 
-export function createUserId(value: string): UserId {
-  return value as UserId;
+export function validate<T extends object>(data: T, schema: ValidationSchema<T>): ValidationResult<T> {
+  const errors = Object.create(null) as Partial<Record<keyof T, string>>;
+  let failed = false;
+  for (const key of Reflect.ownKeys(schema) as (keyof T)[]) {
+    for (const rule of schema[key]) {
+      const message = rule(data[key]);
+      if (message !== null) {
+        errors[key] = message;
+        failed = true;
+        break;
+      }
+    }
+  }
+  return failed ? { valid: false, errors } : { valid: true, data };
 }
-
-export function createLessonUser(name: string, email?: string): LessonUser {
-  return {
-    id: createUserId(`user:${name.toLowerCase()}`),
-    name,
-    ...(email ? { email } : {}),
-  };
-}
-
-export function sum(values: readonly number[]): number {
-  return values.reduce((total: number, value: number) => total + value, 0);
-}
-
